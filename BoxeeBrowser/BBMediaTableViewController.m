@@ -109,12 +109,18 @@
     
     self.filterButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:(self.filter == self.defaultFilter ? @"button-watched.png" : @"button-unwatched.png")] style:UIBarButtonItemStyleBordered target:self action:@selector(filterButtonClicked:)];
     UIBarButtonItem *sortButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button-sort.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(sortButtonClicked:)];
+    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button-search.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchButtonClicked:)];
     
-    self.navigationItem.rightBarButtonItems  = [NSArray arrayWithObjects:sortButton,self.filterButton,nil];
+    self.navigationItem.rightBarButtonItems  = [NSArray arrayWithObjects:searchButton, sortButton, self.filterButton, nil];
     
     [self updateTitleWithCount:[self.tableView numberOfRowsInSection:0]];
     
     [self.dataSource updateView];
+}
+
+-(void)searchButtonClicked:(id) sender
+{
+    
 }
 
 - (void)filterButtonClicked:(id) sender
@@ -203,6 +209,7 @@
 
 -(void)reloadData
 {
+    [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     [self.tableView reloadData];
     
     if ([self.tableView numberOfRowsInSection:0] == 0

@@ -48,7 +48,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" horizontalHuggingPriority="251" text="BoxeeBox IP Address                               " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lw9-pG-Ihe">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" horizontalHuggingPriority="251" ambiguous="YES" text="BoxeeBox IP Address                               " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lw9-pG-Ihe">
                                                     <rect key="frame" x="20" y="11" width="317" height="21"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -57,11 +57,11 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="10.0.0.1" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6F0-qm-6DG">
-                                                    <rect key="frame" x="372" y="11" width="376" height="21"/>
+                                                    <rect key="frame" x="548" y="11" width="200" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="376" id="9Yt-DS-pVY"/>
+                                                        <constraint firstAttribute="width" constant="200" id="9Yt-DS-pVY"/>
                                                     </constraints>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
@@ -72,7 +72,6 @@
                                             <constraints>
                                                 <constraint firstItem="6F0-qm-6DG" firstAttribute="centerY" secondItem="HvN-Nj-7qk" secondAttribute="centerY" id="Av1-Gy-FN7"/>
                                                 <constraint firstItem="6F0-qm-6DG" firstAttribute="baseline" secondItem="lw9-pG-Ihe" secondAttribute="baseline" id="RHC-pQ-5c2"/>
-                                                <constraint firstItem="6F0-qm-6DG" firstAttribute="leading" secondItem="lw9-pG-Ihe" secondAttribute="trailing" constant="35" id="wrb-ih-vSB"/>
                                                 <constraint firstAttribute="trailing" secondItem="6F0-qm-6DG" secondAttribute="trailing" constant="20" id="xPa-6b-4CE"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -1074,6 +1073,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="xua-Xk-eT3"/>
+        <segue reference="Zei-QD-Xfb"/>
     </inferredMetricsTieBreakers>
 </document>

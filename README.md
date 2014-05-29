@@ -15,10 +15,9 @@ On second run (and forward) the app will first read the local copy of the catalo
 
 The app will try to complete missing movie information using omdb API (http://www.omdbapi.com)
 
-What's next?
-
-1. I'm seeking way to tell the boxes to play a given movie so I can add a 'Play on Boxee' button in the app.
-2. I'd like to add a boxee remote functionality in the app
+What's next (not necessarily in that order)?
+1. I'm trying to find a way to tell the boxee to play a given movie so I can add a 'Play on Boxee' button in the app.
+2. I plan to add a boxee remote functionality in the app someday
 3. maybe add a 'Play on iPad' functionality, although it will probably work well only if there is very good network speed between the boxee and the iPad - I will not develop streaming capabilities on the boxee for that :-)
 4. Add a 'Search' button
 5. Show 'Unidentified Movies'

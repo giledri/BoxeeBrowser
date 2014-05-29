@@ -43,6 +43,7 @@
 		FB32109E192D3F330047CF48 /* BBSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB32109D192D3F330047CF48 /* BBSplitViewController.m */; };
 		FB3210A0192D42790047CF48 /* icon-home-shows.png in Resources */ = {isa = PBXBuildFile; fileRef = FB32109F192D42790047CF48 /* icon-home-shows.png */; };
 		FB3210A4192D4A7A0047CF48 /* icon-settings-system.png in Resources */ = {isa = PBXBuildFile; fileRef = FB3210A3192D4A7A0047CF48 /* icon-settings-system.png */; };
+		FB3CD97E1937BE6100BE4773 /* button-search.png in Resources */ = {isa = PBXBuildFile; fileRef = FB3CD97D1937BE6100BE4773 /* button-search.png */; };
 		FB424DBC193126AA002FE4FB /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = FB424DBB193126AA002FE4FB /* UIImageViewAligned.m */; };
 		FB424DBF19312ABB002FE4FB /* BBMediaTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB424DBE19312ABB002FE4FB /* BBMediaTableViewController.m */; };
 		FB6A19B1192D384D004BEA00 /* icon-home-movies.png in Resources */ = {isa = PBXBuildFile; fileRef = FB6A19B0192D384D004BEA00 /* icon-home-movies.png */; };
@@ -121,6 +122,7 @@
 		FB32109D192D3F330047CF48 /* BBSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBSplitViewController.m; sourceTree = "<group>"; };
 		FB32109F192D42790047CF48 /* icon-home-shows.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-home-shows.png"; sourceTree = "<group>"; };
 		FB3210A3192D4A7A0047CF48 /* icon-settings-system.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-settings-system.png"; sourceTree = "<group>"; };
+		FB3CD97D1937BE6100BE4773 /* button-search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-search.png"; sourceTree = "<group>"; };
 		FB424DBA193126AA002FE4FB /* UIImageViewAligned.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
 		FB424DBB193126AA002FE4FB /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
 		FB424DBD19312ABB002FE4FB /* BBMediaTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMediaTableViewController.h; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 		FB15613C1911A268006AD3B3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FB3CD97D1937BE6100BE4773 /* button-search.png */,
 				FB3210A3192D4A7A0047CF48 /* icon-settings-system.png */,
 				FB32109F192D42790047CF48 /* icon-home-shows.png */,
 				FB6A19B0192D384D004BEA00 /* icon-home-movies.png */,
@@ -406,6 +409,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FB15614C1911A268006AD3B3 /* Main_iPad.storyboard in Resources */,
+				FB3CD97E1937BE6100BE4773 /* button-search.png in Resources */,
 				FB9DC354192BF5810013A725 /* graphic-rotten-good.png in Resources */,
 				FBEE3954191EBFA4002F78FC /* button-unwatched.png in Resources */,
 				FB9DC353192BF5810013A725 /* graphic-rotten-bad.png in Resources */,
