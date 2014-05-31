@@ -44,6 +44,7 @@
 		FB3210A0192D42790047CF48 /* icon-home-shows.png in Resources */ = {isa = PBXBuildFile; fileRef = FB32109F192D42790047CF48 /* icon-home-shows.png */; };
 		FB3210A4192D4A7A0047CF48 /* icon-settings-system.png in Resources */ = {isa = PBXBuildFile; fileRef = FB3210A3192D4A7A0047CF48 /* icon-settings-system.png */; };
 		FB3CD97E1937BE6100BE4773 /* button-search.png in Resources */ = {isa = PBXBuildFile; fileRef = FB3CD97D1937BE6100BE4773 /* button-search.png */; };
+		FB3CD9811937CDC900BE4773 /* BBBarTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = FB3CD9801937CDC900BE4773 /* BBBarTextField.m */; };
 		FB424DBC193126AA002FE4FB /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = FB424DBB193126AA002FE4FB /* UIImageViewAligned.m */; };
 		FB424DBF19312ABB002FE4FB /* BBMediaTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB424DBE19312ABB002FE4FB /* BBMediaTableViewController.m */; };
 		FB6A19B1192D384D004BEA00 /* icon-home-movies.png in Resources */ = {isa = PBXBuildFile; fileRef = FB6A19B0192D384D004BEA00 /* icon-home-movies.png */; };
@@ -123,6 +124,8 @@
 		FB32109F192D42790047CF48 /* icon-home-shows.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-home-shows.png"; sourceTree = "<group>"; };
 		FB3210A3192D4A7A0047CF48 /* icon-settings-system.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-settings-system.png"; sourceTree = "<group>"; };
 		FB3CD97D1937BE6100BE4773 /* button-search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-search.png"; sourceTree = "<group>"; };
+		FB3CD97F1937CDC900BE4773 /* BBBarTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBBarTextField.h; sourceTree = "<group>"; };
+		FB3CD9801937CDC900BE4773 /* BBBarTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBBarTextField.m; sourceTree = "<group>"; };
 		FB424DBA193126AA002FE4FB /* UIImageViewAligned.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
 		FB424DBB193126AA002FE4FB /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
 		FB424DBD19312ABB002FE4FB /* BBMediaTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMediaTableViewController.h; sourceTree = "<group>"; };
@@ -291,6 +294,8 @@
 				FB9DC356192BF8C30013A725 /* BBRottenImageView.m */,
 				FB32109C192D3F330047CF48 /* BBSplitViewController.h */,
 				FB32109D192D3F330047CF48 /* BBSplitViewController.m */,
+				FB3CD97F1937CDC900BE4773 /* BBBarTextField.h */,
+				FB3CD9801937CDC900BE4773 /* BBBarTextField.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -453,6 +458,7 @@
 				FBA796571917BC72009DF064 /* BBDataSource.m in Sources */,
 				FB9599E91925572A00AC2237 /* BBShowsTableViewController.m in Sources */,
 				FB27CDE51922B789001D22FB /* BBMoviesTableViewController.m in Sources */,
+				FB3CD9811937CDC900BE4773 /* BBBarTextField.m in Sources */,
 				FB1561421911A268006AD3B3 /* main.m in Sources */,
 				FB1561521911A268006AD3B3 /* BBMasterViewController.m in Sources */,
 				FB05E49C191E4F2D00CE5617 /* BBSortViewController.m in Sources */,

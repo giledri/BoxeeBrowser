@@ -9,6 +9,7 @@
 #import "BBMovieDetailsViewController.h"
 #import "BBEnhancedLabel.h"
 #import "BBRottenImageView.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface BBMovieDetailsViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *mediaImage;
@@ -22,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet BBRottenImageView *mediaIsRotten;
 @property (weak, nonatomic) IBOutlet UILabel *mediaRTScore;
 
+@property (strong, nonatomic) MPMoviePlayerController *moviePlayer;
 @end
 
 @implementation BBMovieDetailsViewController
@@ -73,5 +75,38 @@
 {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.imdb.com/title/%@/", self.mediaItem.strIMDBKey]]];
 }
+
+/*
+- (IBAction)playOnDevice:(id)sender
+{
+    NSURL *url = [NSURL URLWithString:self.mediaItem.strPath];
+    self.moviePlayer =  [[MPMoviePlayerController alloc] initWithContentURL:url];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moviePlayBackDidFinish:)
+                                                 name:MPMoviePlayerPlaybackDidFinishNotification
+                                               object:self.moviePlayer];
+    
+    self.moviePlayer.controlStyle = MPMovieControlStyleDefault;
+    self.moviePlayer.shouldAutoplay = YES;
+    [self.view addSubview:self.moviePlayer.view];
+    [self.moviePlayer setFullscreen:YES animated:YES];
+}
+
+- (void) moviePlayBackDidFinish:(NSNotification*)notification
+{
+    MPMoviePlayerController *player = [notification object];
+    [[NSNotificationCenter defaultCenter]
+     removeObserver:self
+     name:MPMoviePlayerPlaybackDidFinishNotification
+     object:player];
+    
+    if ([player
+         respondsToSelector:@selector(setFullscreen:animated:)])
+    {
+        [player.view removeFromSuperview];
+    }
+}
+*/
 
 @end

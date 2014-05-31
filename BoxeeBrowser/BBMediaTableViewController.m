@@ -11,6 +11,7 @@
 #import "BBMediaItem.h"
 #import "BBMovieDetailsViewController.h"
 #import "BBSortViewController.h"
+#import "BBBarTextField.h"
 
 @interface BBMediaTableViewController ()
 
@@ -20,7 +21,7 @@
 @property (nonatomic)BBFilter filter;
 @property (strong, nonatomic) UIBarButtonItem* filterButton;
 @property (nonatomic)BOOL isInitialFilter;
-
+@property (strong, nonatomic) BBBarTextField *searchTextField;
 
 @property (strong, nonatomic) UIPopoverController *sortPopover;
 
@@ -111,16 +112,60 @@
     UIBarButtonItem *sortButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button-sort.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(sortButtonClicked:)];
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button-search.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchButtonClicked:)];
     
-    self.navigationItem.rightBarButtonItems  = [NSArray arrayWithObjects:searchButton, sortButton, self.filterButton, nil];
+    self.searchTextField = [[BBBarTextField alloc] initWithSize:CGSizeMake(170,40) andTintColor:self.tableView.tintColor];
+    [self.searchTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    UIBarButtonItem *searchBox = [[UIBarButtonItem alloc] initWithCustomView:self.searchTextField];
     
+    UIBarButtonItem *dummyButton = [[UIBarButtonItem alloc] initWithCustomView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 60, 40)]];
+    
+    self.navigationItem.rightBarButtonItems  = [NSArray arrayWithObjects:sortButton, self.filterButton, searchButton, searchBox, dummyButton, nil];
+    
+    [self.navigationItem.titleView setContentMode:UIViewContentModeCenter];
     [self updateTitleWithCount:[self.tableView numberOfRowsInSection:0]];
+    
     
     [self.dataSource updateView];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    CGRect frame = self.navigationItem.titleView.frame;
+    frame.size.width -= 60*3;
+    self.navigationItem.titleView.frame = frame;
+}
+
+-(void)textFieldDidChange:(id) sender
+{
+    if (sender == self.searchTextField)
+    {
+        NSString* searchText = self.searchTextField.text;
+        
+        self.dataSource.searchText = searchText;
+        [self.dataSource updateView];
+    }
+}
+
 -(void)searchButtonClicked:(id) sender
 {
-    
+    [self.searchTextField setHidden:![self.searchTextField isHidden]];
+
+    if ([self.searchTextField isHidden])
+    {
+        self.dataSource.searchText = self.searchTextField.text = @"";
+        [self.searchTextField resignFirstResponder];
+        [self.dataSource updateView];
+    }
+    else
+    {
+        [self.searchTextField becomeFirstResponder];
+    }
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{   
+    return YES;
 }
 
 - (void)filterButtonClicked:(id) sender

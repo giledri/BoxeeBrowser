@@ -105,6 +105,7 @@
     self.delegate = delegate;
     self.filter = filter;
     self.order = order;
+    self.searchText = @"";
 }
 
 -(void) updateView
@@ -114,21 +115,28 @@
         return;
     }
     
-    NSArray *listToSort;
+    NSArray *filteredList;
     switch (self.filter)
     {
         case AllMovies:
-            listToSort = self.allMovies;
+            filteredList = self.allMovies;
             break;
         case UnwatchedMovies:
-            listToSort = self.unWatchedMovies;
+            filteredList = self.unWatchedMovies;
             break;
         case AllShows:
-            listToSort = self.allShows;
+            filteredList = self.allShows;
             break;
         case UnwatchedShows:
-            listToSort = self.unWatchedShows;
+            filteredList = self.unWatchedShows;
             break;
+    }
+    
+    NSArray *listToSort = filteredList;
+    if (self.searchText.length)
+    {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"strTitle CONTAINS[cd] %@", self.self.searchText];
+        listToSort = [filteredList filteredArrayUsingPredicate:predicate];
     }
     
     NSArray *sortedList = [listToSort sortedArrayUsingComparator:^(id obj1, id obj2) {

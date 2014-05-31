@@ -33,10 +33,9 @@ typedef enum {
     dateAddedOldestFirst = 4
 } BBOrder;
 
-//- (BBDataSource*)initWithDelegate:(id<BBDataSourceDelegate>) delegate;
-
 @property (nonatomic)BBFilter filter;
 @property (nonatomic)BBOrder order;
+@property (strong, nonatomic)NSString *searchText;
 
 @property (strong, nonatomic)id<BBDataSourceDelegate> delegate;
 
