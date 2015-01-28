@@ -186,7 +186,7 @@
             break;
             
         default:
-            NSLog(@"Unknown event %u", streamEvent);
+            NSLog(@"Unknown event %lu", streamEvent);
     }
     
 }

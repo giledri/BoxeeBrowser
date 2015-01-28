@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "BBMediaTableViewCell.h"
 
-@interface BBMovieTableViewCell : BBMediaTableViewCell
+@interface BBShowTableViewCell : BBMediaTableViewCell
 
 @end

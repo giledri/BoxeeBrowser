@@ -15,9 +15,10 @@
 @interface BBMediaTableViewController : BBDetailViewController <BBDataSourceDelegate,BBSortViewDelegate>
 
 @property (strong, nonatomic)BBAppDelegate* appDelegate;
-@property (strong, nonatomic) BBDataSource* dataSource;
+@property (strong, nonatomic)BBDataSource* dataSource;
 
 @property (nonatomic)BBFilter defaultFilter;
+@property (strong, nonatomic)NSString* cellTemplaceToUse;
 
 -(BBFilter)readFilterAttribute;
 -(BBOrder)readOrderAttribute;

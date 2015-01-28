@@ -37,7 +37,7 @@ extern const NSString* settingsSyncOnStatup;
 
 -(void) storeAttribute:(const NSString*)attribute withStringValue:(NSString*)value;
 
--(int) readIntegerAttribute:(const NSString*)attribute withDefaultValue:(int)defaultValue;
+-(NSInteger) readIntegerAttribute:(const NSString*)attribute withDefaultValue:(int)defaultValue;
 
 -(NSString*) readStringAttribute:(const NSString*)attribute withDefaultValue:(NSString*)defaultValue;
 

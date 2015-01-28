@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7FE276A01A798718000C8A28 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7FE2769F1A798718000C8A28 /* Entitlements.plist */; };
+		7FE276A31A7993B2000C8A28 /* BBMediaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FE276A21A7993B2000C8A28 /* BBMediaTableViewCell.m */; };
 		FB05E49C191E4F2D00CE5617 /* BBSortViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB05E49B191E4F2D00CE5617 /* BBSortViewController.m */; };
 		FB1561341911A268006AD3B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1561331911A268006AD3B3 /* Foundation.framework */; };
 		FB1561361911A268006AD3B3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1561351911A268006AD3B3 /* CoreGraphics.framework */; };
@@ -54,7 +56,9 @@
 		FB9DC354192BF5810013A725 /* graphic-rotten-good.png in Resources */ = {isa = PBXBuildFile; fileRef = FB9DC352192BF5810013A725 /* graphic-rotten-good.png */; };
 		FB9DC357192BF8C30013A725 /* BBRottenImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB9DC356192BF8C30013A725 /* BBRottenImageView.m */; };
 		FBA796571917BC72009DF064 /* BBDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA796561917BC72009DF064 /* BBDataSource.m */; };
+		FBA95A771A32634E009CA3B3 /* BBShowTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA95A761A32634E009CA3B3 /* BBShowTableViewCell.m */; };
 		FBB1524819183E9E00C8F844 /* BBMovieDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FBB1524719183E9E00C8F844 /* BBMovieDetailsViewController.m */; };
+		FBBB26C719B7A5900018CCF6 /* BBSeries.m in Sources */ = {isa = PBXBuildFile; fileRef = FBBB26C619B7A5900018CCF6 /* BBSeries.m */; };
 		FBC1974C191E4737006C6F63 /* button-sort.png in Resources */ = {isa = PBXBuildFile; fileRef = FBC1974B191E4737006C6F63 /* button-sort.png */; };
 		FBEE3954191EBFA4002F78FC /* button-unwatched.png in Resources */ = {isa = PBXBuildFile; fileRef = FBEE3953191EBFA4002F78FC /* button-unwatched.png */; };
 		FBEE3956191EBFBD002F78FC /* button-watched.png in Resources */ = {isa = PBXBuildFile; fileRef = FBEE3955191EBFBD002F78FC /* button-watched.png */; };
@@ -71,6 +75,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7FE2769F1A798718000C8A28 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
+		7FE276A11A7993B2000C8A28 /* BBMediaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMediaTableViewCell.h; sourceTree = "<group>"; };
+		7FE276A21A7993B2000C8A28 /* BBMediaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMediaTableViewCell.m; sourceTree = "<group>"; };
 		FB05E49A191E4F2D00CE5617 /* BBSortViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBSortViewController.h; sourceTree = "<group>"; };
 		FB05E49B191E4F2D00CE5617 /* BBSortViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBSortViewController.m; sourceTree = "<group>"; };
 		FB1561301911A268006AD3B3 /* BoxeeBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoxeeBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -141,8 +148,12 @@
 		FB9DC356192BF8C30013A725 /* BBRottenImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBRottenImageView.m; sourceTree = "<group>"; };
 		FBA796551917BC72009DF064 /* BBDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BBDataSource.h; path = ../BBDataSource.h; sourceTree = "<group>"; };
 		FBA796561917BC72009DF064 /* BBDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BBDataSource.m; path = ../BBDataSource.m; sourceTree = "<group>"; };
+		FBA95A751A32634E009CA3B3 /* BBShowTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBShowTableViewCell.h; sourceTree = "<group>"; };
+		FBA95A761A32634E009CA3B3 /* BBShowTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBShowTableViewCell.m; sourceTree = "<group>"; };
 		FBB1524619183E9E00C8F844 /* BBMovieDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMovieDetailsViewController.h; sourceTree = "<group>"; };
 		FBB1524719183E9E00C8F844 /* BBMovieDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMovieDetailsViewController.m; sourceTree = "<group>"; };
+		FBBB26C519B7A5900018CCF6 /* BBSeries.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBSeries.h; sourceTree = "<group>"; };
+		FBBB26C619B7A5900018CCF6 /* BBSeries.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBSeries.m; sourceTree = "<group>"; };
 		FBC1974B191E4737006C6F63 /* button-sort.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-sort.png"; sourceTree = "<group>"; };
 		FBEE3953191EBFA4002F78FC /* button-unwatched.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-unwatched.png"; sourceTree = "<group>"; };
 		FBEE3955191EBFBD002F78FC /* button-watched.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-watched.png"; sourceTree = "<group>"; };
@@ -178,6 +189,7 @@
 		FB1561271911A268006AD3B3 = {
 			isa = PBXGroup;
 			children = (
+				7FE2769F1A798718000C8A28 /* Entitlements.plist */,
 				FB15613B1911A268006AD3B3 /* BoxeeBrowser */,
 				FB1561641911A268006AD3B3 /* BoxeeBrowserTests */,
 				FB1561321911A268006AD3B3 /* Frameworks */,
@@ -222,8 +234,12 @@
 				FB27CDE41922B789001D22FB /* BBMoviesTableViewController.m */,
 				FB9599E71925572A00AC2237 /* BBShowsTableViewController.h */,
 				FB9599E81925572A00AC2237 /* BBShowsTableViewController.m */,
+				7FE276A11A7993B2000C8A28 /* BBMediaTableViewCell.h */,
+				7FE276A21A7993B2000C8A28 /* BBMediaTableViewCell.m */,
 				FB15618F1911B491006AD3B3 /* BBMovieTableViewCell.h */,
 				FB1561901911B491006AD3B3 /* BBMovieTableViewCell.m */,
+				FBA95A751A32634E009CA3B3 /* BBShowTableViewCell.h */,
+				FBA95A761A32634E009CA3B3 /* BBShowTableViewCell.m */,
 				FBB1524619183E9E00C8F844 /* BBMovieDetailsViewController.h */,
 				FBB1524719183E9E00C8F844 /* BBMovieDetailsViewController.m */,
 				FB05E49A191E4F2D00CE5617 /* BBSortViewController.h */,
@@ -318,6 +334,8 @@
 				FBA796561917BC72009DF064 /* BBDataSource.m */,
 				FB1561881911A457006AD3B3 /* BBMediaItem.h */,
 				FB1561891911A457006AD3B3 /* BBMediaItem.m */,
+				FBBB26C519B7A5900018CCF6 /* BBSeries.h */,
+				FBBB26C619B7A5900018CCF6 /* BBSeries.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -425,6 +443,7 @@
 				FB19E798192AADFB00B08984 /* watched.png in Resources */,
 				FB1561401911A268006AD3B3 /* InfoPlist.strings in Resources */,
 				FB6A19B1192D384D004BEA00 /* icon-home-movies.png in Resources */,
+				7FE276A01A798718000C8A28 /* Entitlements.plist in Resources */,
 				FB19E794192AA7BA00B08984 /* thumbnail-default-show.png in Resources */,
 				FB19E792192AA62200B08984 /* thumbnail-default-movie.png in Resources */,
 				FB3210A4192D4A7A0047CF48 /* icon-settings-system.png in Resources */,
@@ -448,6 +467,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBBB26C719B7A5900018CCF6 /* BBSeries.m in Sources */,
 				FB1561801911A3CC006AD3B3 /* BBEnhancedLabel.m in Sources */,
 				FBB1524819183E9E00C8F844 /* BBMovieDetailsViewController.m in Sources */,
 				FB1561841911A3CC006AD3B3 /* BBTelnet.m in Sources */,
@@ -458,6 +478,7 @@
 				FBA796571917BC72009DF064 /* BBDataSource.m in Sources */,
 				FB9599E91925572A00AC2237 /* BBShowsTableViewController.m in Sources */,
 				FB27CDE51922B789001D22FB /* BBMoviesTableViewController.m in Sources */,
+				FBA95A771A32634E009CA3B3 /* BBShowTableViewCell.m in Sources */,
 				FB3CD9811937CDC900BE4773 /* BBBarTextField.m in Sources */,
 				FB1561421911A268006AD3B3 /* main.m in Sources */,
 				FB1561521911A268006AD3B3 /* BBMasterViewController.m in Sources */,
@@ -470,6 +491,7 @@
 				FB1A1F80192933D900CD6EE1 /* BBUITableViewCell.m in Sources */,
 				FB1561811911A3CC006AD3B3 /* BBFtp.m in Sources */,
 				FB9599EC19256E7B00AC2237 /* SETTINGS.m in Sources */,
+				7FE276A31A7993B2000C8A28 /* BBMediaTableViewCell.m in Sources */,
 				FB15614F1911A268006AD3B3 /* BoxeeBrowser.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -536,7 +558,9 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "-";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -575,7 +599,9 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "-";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -595,14 +621,14 @@
 		FB15616F1911A268006AD3B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = appicon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iOS Developer";
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
+				CODE_SIGN_IDENTITY = "-";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BoxeeBrowser/BoxeeBrowser-Prefix.pch";
 				INFOPLIST_FILE = "BoxeeBrowser/BoxeeBrowser-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				OTHER_CODE_SIGN_FLAGS = "-gta";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
@@ -612,14 +638,14 @@
 		FB1561701911A268006AD3B3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = appicon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iOS Developer";
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
+				CODE_SIGN_IDENTITY = "-";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BoxeeBrowser/BoxeeBrowser-Prefix.pch";
 				INFOPLIST_FILE = "BoxeeBrowser/BoxeeBrowser-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				OTHER_CODE_SIGN_FLAGS = "-gta";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
@@ -642,6 +668,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "BoxeeBrowserTests/BoxeeBrowserTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
@@ -660,6 +687,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BoxeeBrowser/BoxeeBrowser-Prefix.pch";
 				INFOPLIST_FILE = "BoxeeBrowserTests/BoxeeBrowserTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;

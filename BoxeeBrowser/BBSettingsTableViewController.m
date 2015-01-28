@@ -107,7 +107,6 @@
     return (success == 1);
 }
 
-
 - (IBAction)syncOnStartupDidChange:(id)sender
 {
     if (sender == self.syncOnStartupSwitch)

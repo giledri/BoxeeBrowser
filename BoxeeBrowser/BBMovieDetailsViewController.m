@@ -51,13 +51,13 @@
         self.mediaImage.image = [UIImage imageWithData:self.mediaItem.imageData];
     }
     
-    self.mediaDescription.text = self.mediaItem.strExtDescription;
+    self.mediaDescription.text = self.mediaItem.strExtDescription.length ? self.mediaItem.strExtDescription : self.mediaItem.strDescription;
     self.mediaScore.text = [NSString stringWithFormat:@"%.1f", ((double)self.mediaItem.iRating) / 10];
     
     [self.mediaIsRotten setHidden:(self.mediaItem.iRTCriticsScore < 0)];
     [self.mediaRTScore setHidden:(self.mediaItem.iRTCriticsScore < 0)];
     self.mediaIsRotten.isRotten = self.mediaItem.isRotten;
-    self.mediaRTScore.text = [NSString stringWithFormat:@"%d%%", self.mediaItem.iRTCriticsScore];
+    self.mediaRTScore.text = [NSString stringWithFormat:@"%ld%%", (long)self.mediaItem.iRTCriticsScore];
     
     self.mediaDirector.text = self.mediaItem.strDirector;
     self.mediaCast.text = self.mediaItem.strCast;

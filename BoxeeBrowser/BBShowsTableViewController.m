@@ -15,6 +15,14 @@
 
 @implementation BBShowsTableViewController
 
+
+- (void)awakeFromNib
+{
+    self.cellTemplaceToUse = @"Show Item";
+    
+    [super awakeFromNib];
+}
+
 -(BBFilter)defaultFilter
 {
     return UnwatchedShows;

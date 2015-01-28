@@ -6,13 +6,12 @@
 //  Copyright (c) 2014 Gil Edri. All rights reserved.
 //
 
-#import "BBMovieTableViewCell.h"
+#import "BBShowTableViewCell.h"
 
-@interface BBMovieTableViewCell()
+@interface BBShowTableViewCell()
 
 @end
 
-@implementation BBMovieTableViewCell
-
+@implementation BBShowTableViewCell
 
 @end

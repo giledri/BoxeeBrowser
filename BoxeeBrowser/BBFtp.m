@@ -1,4 +1,4 @@
-//
+	//
 //  BBFtp.m
 //  BoxeeBrowser
 //
@@ -132,7 +132,7 @@
             
         case NSStreamEventHasSpaceAvailable:
             // should never happen for the output stream
-            NSLog(@"Event not expected %u", eventCode);
+            NSLog(@"Event not expected %lu", eventCode);
             break;
             
         case NSStreamEventErrorOccurred:
@@ -146,7 +146,7 @@
             break;
 
         default:
-            NSLog(@"Unknown event %u", eventCode);
+            NSLog(@"Unknown event %lu", eventCode);
             break;
     }
 }

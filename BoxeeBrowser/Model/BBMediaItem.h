@@ -16,14 +16,14 @@
 @property (nonatomic) int idFile;
 @property (strong, nonatomic) NSString *strPath;
 @property (strong, nonatomic) NSString *strTitle;
-@property (nonatomic) int iDuration;
+@property (nonatomic) NSInteger iDuration;
 @property (strong, nonatomic) NSString *strDescription; // seconds
 @property (strong, nonatomic) NSString *strExtDescription;
 @property (strong, nonatomic) NSString *strCover; // image path
 @property (strong, nonatomic) NSData *imageData;
-@property (nonatomic) int iRating; //IMDB
-@property (nonatomic) int iRTCriticsScore; //Rotten Tomatoes
-@property (nonatomic) int iYear;
+@property (nonatomic) NSInteger iRating; //IMDB
+@property (nonatomic) NSInteger iRTCriticsScore; //Rotten Tomatoes
+@property (nonatomic) NSInteger iYear;
 @property (strong, nonatomic) NSString *strIMDBKey;
 
 @property (strong, nonatomic) NSString *strDirector;

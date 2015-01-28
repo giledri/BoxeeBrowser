@@ -7,17 +7,20 @@
 //
 
 #import "BBMoviesTableViewController.h"
-#import "BBMovieTableViewCell.h"
-#import "BBAppDelegate.h"
-#import "BBMediaItem.h"
-#import "BBMovieDetailsViewController.h"
-#import "BBSortViewController.h"
+
 
 @interface BBMoviesTableViewController ()
 
 @end
 
 @implementation BBMoviesTableViewController
+
+- (void)awakeFromNib
+{
+    self.cellTemplaceToUse = @"Media Item";
+    
+    [super awakeFromNib];
+}
 
 -(BBFilter)defaultFilter
 {

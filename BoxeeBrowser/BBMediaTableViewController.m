@@ -8,6 +8,7 @@
 
 #import "BBMediaTableViewController.h"
 #import "BBMovieTableViewCell.h"
+#import "BBShowTableViewCell.h"
 #import "BBMediaItem.h"
 #import "BBMovieDetailsViewController.h"
 #import "BBSortViewController.h"
@@ -77,15 +78,6 @@
     [super awakeFromNib];
 }
 
-// is this needed?
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-    }
-    return self;
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -108,9 +100,9 @@
         [self.dataSource prepareForDelegate:self withFilter:self.filter andOrder:order];
     }
     
-    self.filterButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:(self.filter == self.defaultFilter ? @"button-watched.png" : @"button-unwatched.png")] style:UIBarButtonItemStyleBordered target:self action:@selector(filterButtonClicked:)];
-    UIBarButtonItem *sortButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button-sort.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(sortButtonClicked:)];
-    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button-search.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchButtonClicked:)];
+    self.filterButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:(self.filter == self.defaultFilter ? @"button-watched.png" : @"button-unwatched.png")] style:UIBarButtonItemStylePlain target:self action:@selector(filterButtonClicked:)];
+    UIBarButtonItem *sortButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button-sort.png"] style:UIBarButtonItemStylePlain target:self action:@selector(sortButtonClicked:)];
+    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button-search.png"] style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonClicked:)];
     
     self.searchTextField = [[BBBarTextField alloc] initWithSize:CGSizeMake(170,40) andTintColor:self.tableView.tintColor];
     [self.searchTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
@@ -170,6 +162,8 @@
 
 - (void)filterButtonClicked:(id) sender
 {
+    self.isInitialFilter = false;
+    
     UIBarButtonItem* filterButton = (UIBarButtonItem*)sender;
     
     switch (self.filter) {
@@ -235,14 +229,14 @@
     return filterName;
 }
 
-- (void)updateTitleWithCount:(int)count
+- (void)updateTitleWithCount:(NSInteger)count
 {
     NSString* filterName = [self filterName];
     
     self.title = filterName;
     if (count > 0)
     {
-        self.title = [NSString stringWithFormat:@"%@ - %i items", filterName, count];
+        self.title = [NSString stringWithFormat:@"%@ - %li items", filterName, (long)count];
     }
     
     [self.navigationController setTitle:self.title];
@@ -258,7 +252,7 @@
     [self.tableView reloadData];
     
     if ([self.tableView numberOfRowsInSection:0] == 0
-        && self.filter == UnwatchedShows
+        && (self.filter == UnwatchedShows || self.filter == UnwatchedMovies)
         && self.isInitialFilter)
     {
         [self filterButtonClicked:self.filterButton];
@@ -286,7 +280,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    int count = [self itemsFromDataSource].count;
+    NSInteger count = [self itemsFromDataSource].count;
     
     [self updateTitleWithCount:count];
     
@@ -296,8 +290,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"Media Item";
-    BBMovieTableViewCell *cell = [self.tableView  dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    NSString *cellIdentifier = self.cellTemplaceToUse;
+    BBMediaTableViewCell *cell = [self.tableView  dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     
     if (cell == nil)
     {

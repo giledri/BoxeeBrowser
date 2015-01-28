@@ -60,7 +60,7 @@
 
 - (NSString*) movieDetails
 {
-    return [NSString stringWithFormat:@"%d minutes • %d", self.iDuration / 60, self.iYear];
+    return [NSString stringWithFormat:@"%ld minutes • %ld", self.iDuration / 60, (long)self.iYear];
 }
 
 - (BOOL) isRotten

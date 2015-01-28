@@ -173,7 +173,7 @@ const NSString* settingsSyncOnStatup = @"settingsSyncOnStatup";
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
--(int) readIntegerAttribute:(NSString*)attribute withDefaultValue:(int)defaultValue
+-(NSInteger) readIntegerAttribute:(NSString*)attribute withDefaultValue:(int)defaultValue
 {
     if ([[[[NSUserDefaults standardUserDefaults] dictionaryRepresentation] allKeys] containsObject:attribute])
     {

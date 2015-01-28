@@ -10,6 +10,7 @@
 #import "BBAppDelegate.h"
 #import "BBFtp.h"
 #import "BBMediaItem.h"
+#import "BBSeries.h"
 #import <sqlite3.h>
 
 
@@ -268,9 +269,49 @@
     return strCast;
 }
 
+- (void)readSeriesInfo:(NSString*)strSeriesId andUpdateSeries:(BBSeries*)series
+{
+    const char *catalogDbPath = [self.boxeeCatalogPath UTF8String];
+    sqlite3 *database;
+    
+    if (sqlite3_open(catalogDbPath, &database) == SQLITE_OK)
+    {
+        NSString *querySQL = [NSString stringWithFormat:@"  \
+                              SELECT    strTitle,       \
+                                        strCover,       \
+                                        strDescription, \
+                                        iYear           \
+                              FROM      series          \
+                              WHERE     strBoxeeId=%@", strSeriesId];
+        
+        const char *query_stmt = [querySQL UTF8String];
+        
+        sqlite3_stmt    *statement;
+        
+        if (sqlite3_prepare_v2(database, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+        {
+            while (sqlite3_step(statement) == SQLITE_ROW)
+            {
+                int columnIndex = 0;
+                series.strTitle = [[NSString alloc]initWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
+                series.strCover = [[NSString alloc]initWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
+                series.strDescription = [[NSString alloc]initWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
+                series.iYear = sqlite3_column_int(statement, columnIndex++);
+            }
+            
+            sqlite3_finalize(statement);
+        }
+        
+        sqlite3_close(database);
+    }
+}
+
+
 const NSString *queryVideoFiles = @"\
         SELECT  vf.strBoxeeId,          \
                 vf.strSeriesId,         \
+                vf.iSeason,             \
+                vf.iEpisode,            \
                 vf.idVideo,             \
                 vf.idFile,              \
                 vf.strPath,             \
@@ -286,7 +327,7 @@ const NSString *queryVideoFiles = @"\
                 vf.iRTCriticsScore      \
         FROM video_files vf             \
         INNER JOIN media_folders mf ON vf.idFolder=mf.idFolder      \
-        GROUP BY strBoxeeId";
+        GROUP BY strBoxeeId,vf.strSeriesId,vf.iSeason,vf.iEpisode";
 
 const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
 
@@ -305,13 +346,33 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
 
 - (BBMediaItem *)newOrExistingItemByBoxeeId:(NSString *)strBoxeeId andSeriesId:(NSString *)strSeriesId
 {
-    BBMediaItem *item = [self.videoItemsByKey valueForKey:strBoxeeId];
+    NSMutableDictionary *videoItemsByKey;
+    
+    if ([strSeriesId length])
+    {
+        BBSeries *series = [self.videoItemsByKey valueForKey:strSeriesId];
+        if (series == nil)
+        {
+            series = [[BBSeries alloc] initWithSeriesId:strSeriesId];
+            [self.videoItemsByKey setValue:series forKey:strSeriesId];
+            
+            [self readSeriesInfo:strSeriesId andUpdateSeries:series];
+        }
+        
+        videoItemsByKey = series.shows;
+    }
+    else
+    {
+        videoItemsByKey = self.videoItemsByKey;
+    }
+  
+    BBMediaItem *item = [videoItemsByKey valueForKey:strBoxeeId];
     
     if (item == nil)
     {
         item = [[BBMediaItem alloc] initWithBoxeeId:strBoxeeId andSeriesId:strSeriesId];
         
-        [self.videoItemsByKey setValue:item forKey:strBoxeeId];
+        [videoItemsByKey setValue:item forKey:strBoxeeId];
         
         if ([strSeriesId length])
         {
@@ -336,6 +397,13 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
     int columnIndex = 0;
     NSString* strBoxeeId = [[NSString alloc]initWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
     NSString* strSeriesId = [[NSString alloc]initWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
+    int iSeason = sqlite3_column_int(statement, columnIndex++);
+    int iEpisode = sqlite3_column_int(statement, columnIndex++);
+    
+    if ([strBoxeeId length] == 0  && [strSeriesId length] >0)
+    {
+        strBoxeeId = [NSString stringWithFormat:@"%@ S%dE%d",strSeriesId, iSeason, iEpisode];
+    }
     
     BBMediaItem *item;
     item = [self newOrExistingItemByBoxeeId:strBoxeeId andSeriesId:strSeriesId];
@@ -449,6 +517,8 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
             
             [self.unWatchedMovies removeAllObjects];
             [self.unWatchedMovies addObjectsFromArray:self.allMovies];
+            [self.unWatchedShows removeAllObjects];
+            [self.unWatchedShows addObjectsFromArray:self.allShows];
             
             if (sqlite3_open(userCatalogDbPath, &database) == SQLITE_OK)
             {
@@ -572,7 +642,7 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
         if (!item.iDuration
             && strRuntime.length && ![strRuntime isEqualToString:@"N/A"])
         {
-            int iDuration = [strRuntime integerValue] * 60;
+            NSInteger iDuration = [strRuntime integerValue] * 60;
             if (iDuration)
             {
                 itemUpdated = YES;
@@ -583,7 +653,7 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
         if (!item.iYear
             && strYear.length && ![strYear isEqualToString:@"N/A"])
         {
-            int iYear = [strYear integerValue];
+            NSInteger iYear = [strYear integerValue];
             if (iYear)
             {
                 itemUpdated = YES;
@@ -594,7 +664,7 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
         if (!item.iRating
             && strImdbRating.length && ![strImdbRating isEqualToString:@"N/A"])
         {
-            int iRating = [strImdbRating integerValue] * 10;
+            NSInteger iRating = [strImdbRating integerValue] * 10;
             if (iRating)
             {
                 itemUpdated = YES;

@@ -10,29 +10,29 @@
 	<string>BoxeeBrowser</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>DEDB5EFD-03F7-4C32-A86F-47E76A6D3F7B</key>
+		<key>CE3ED837D5C79B2C292FB1A6F5385963DD53D954</key>
 		<string>https://github.com/giledri/BoxeeBrowser</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>BoxeeBrowser.xcodeproj/project.xcworkspace</string>
+	<string>BoxeeBrowser.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>DEDB5EFD-03F7-4C32-A86F-47E76A6D3F7B</key>
+		<key>CE3ED837D5C79B2C292FB1A6F5385963DD53D954</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/giledri/BoxeeBrowser</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>DEDB5EFD-03F7-4C32-A86F-47E76A6D3F7B</string>
+	<string>CE3ED837D5C79B2C292FB1A6F5385963DD53D954</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>DEDB5EFD-03F7-4C32-A86F-47E76A6D3F7B</string>
+			<string>CE3ED837D5C79B2C292FB1A6F5385963DD53D954</string>
 			<key>IDESourceControlWCCName</key>
 			<string>BoxeeBrowser</string>
 		</dict>
