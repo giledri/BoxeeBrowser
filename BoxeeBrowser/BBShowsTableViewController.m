@@ -30,12 +30,12 @@
 
 -(BBFilter)readFilterAttribute
 {
-    return [self.appDelegate readIntegerAttribute:showsFilter withDefaultValue:self.defaultFilter];
+    return (BBFilter)[self.appDelegate readIntegerAttribute:showsFilter withDefaultValue:self.defaultFilter];
 }
 
 -(BBOrder)readOrderAttribute
 {
-    return [self.appDelegate readIntegerAttribute:showsOrder withDefaultValue:DateAddedNewestFirst];
+    return (BBOrder)[self.appDelegate readIntegerAttribute:showsOrder withDefaultValue:DateAddedNewestFirst];
 }
 
 -(void)storeFilterAttribute:(BBFilter)filter

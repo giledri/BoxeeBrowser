@@ -55,4 +55,7 @@ typedef enum {
 
 -(void) prepareForDelegate:(id<BBDataSourceDelegate>) delegate withFilter:(BBFilter) filter andOrder:(BBOrder) order;
 
+-(void) toggleIsWatched:(BBMediaItem*)item;
+-(BOOL) deleteMedia:(BBMediaItem*)item;
+
 @end

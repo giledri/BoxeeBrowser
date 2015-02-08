@@ -12,4 +12,5 @@
 @interface BBMovieDetailsViewController : UIViewController
 
 @property (strong, nonatomic)BBMediaItem *mediaItem;
+
 @end

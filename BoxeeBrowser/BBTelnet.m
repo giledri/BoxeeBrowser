@@ -61,13 +61,13 @@
 
 - (void)doWriteCommand:(NSString *)command
 {
-        NSData *data = [[NSData alloc] initWithData:[[command  stringByAppendingString:@"\r"] dataUsingEncoding:NSASCIIStringEncoding]];
-        NSLog(@"client writing: %@", command);
-        NSInteger result = [self.outputStream write:[data bytes] maxLength:[data length]];
-        if (result == -1)
-        {
-            NSLog(@"Error writing to stream");
-        }
+    NSData *data = [[NSData alloc] initWithData:[[command  stringByAppendingString:@"\r"] dataUsingEncoding:NSASCIIStringEncoding]];
+    //NSLog(@"client writing: %@", command);
+    NSInteger result = [self.outputStream write:[data bytes] maxLength:[data length]];
+    if (result == -1)
+    {
+        NSLog(@"Error writing to stream");
+    }
 }
 
 - (void)writeCommand:(NSString *)command
@@ -85,14 +85,34 @@
 
 - (void)whenReceive:(NSString *)text writeCommand:(NSString *)command
 {
-    [self.expectedTexts addObject:text];
-    [self.nextCommands addObject:command];
+    NSUInteger fromIndex = [self.receivedText length] >= [text length] ?
+        [self.receivedText length] - [text length] : 0;
+    if ([self.expectedTexts count] == 0 &&
+        [[self.receivedText substringFromIndex:fromIndex] isEqualToString:text])
+    {
+        [self writeCommand:command];
+    }
+    else
+    {
+        [self.expectedTexts addObject:text];
+        [self.nextCommands addObject:command];
+    }
 }
 
 - (void)whenReceive:(NSString *)text notifySink:(id <BBTelnetDelegate>)delegate
 {
-    [self.expectedTexts addObject:text];
-    [self.nextCommands addObject:delegate];
+    NSUInteger fromIndex = [self.receivedText length] >= [text length] ?
+        [self.receivedText length] - [text length] : 0;
+    if ([self.expectedTexts count] == 0 &&
+        [[self.receivedText substringFromIndex:fromIndex] isEqualToString:text])
+    {
+        [self writeCommand:text];
+    }
+    else
+    {
+        [self.expectedTexts addObject:text];
+        [self.nextCommands addObject:delegate];
+    }
 }
 
 
@@ -114,11 +134,11 @@
     switch (streamEvent) {
             
         case NSStreamEventOpenCompleted:
-            NSLog(@"Stream opened now");
+            //NSLog(@"Stream opened now");
             break;
             
         case NSStreamEventHasBytesAvailable:
-            NSLog(@"has bytes");
+            //NSLog(@"has bytes");
             if (theStream == self.inputStream) {
                 while ([self.inputStream hasBytesAvailable]) {
                     len = [self.inputStream read:buffer maxLength:sizeof(buffer)];
@@ -127,12 +147,13 @@
                         NSString *output = [[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding];
                         
                         if (nil != output) {
-                            NSLog(@"server said: %@", output);
+                            //NSLog(@"server said: %@", output);
                             NSCharacterSet *trimCharacters = [NSCharacterSet characterSetWithCharactersInString:@" "];
                             self.receivedText = [[self.receivedText stringByAppendingString:output] stringByTrimmingCharactersInSet:trimCharacters];
                             
                             NSString * expectedText = [self.expectedTexts firstObject];
-                            NSUInteger fromIndex = [self.receivedText length] - [expectedText length];
+                            NSUInteger fromIndex = [self.receivedText length] >= [expectedText length] ?
+                                [self.receivedText length] - [expectedText length] : 0;
                             if ([[self.receivedText substringFromIndex:fromIndex] isEqualToString:expectedText])
                             {
                                 id command = [self.nextCommands firstObject];
@@ -142,7 +163,7 @@
                                 }
                                 else if ([command conformsToProtocol:@protocol(BBTelnetDelegate)])
                                 {
-                                    NSLog(@"notifying caller that expected text was received");
+                                    //NSLog(@"notifying caller that expected text was received");
                                     [command expectedTextReceived:expectedText];
                                 }
                                 else
@@ -163,7 +184,7 @@
             break;
             
         case NSStreamEventHasSpaceAvailable:
-            NSLog(@"Stream has space available now");
+            //NSLog(@"Stream has space available now");
             if (theStream == self.outputStream)
             {
                 for (NSString *command in self.commandsToWrite)

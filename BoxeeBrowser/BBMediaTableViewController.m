@@ -26,6 +26,8 @@
 
 @property (strong, nonatomic) UIPopoverController *sortPopover;
 
+@property (nonatomic)CGPoint selectedScrollPosition;
+
 @end
 
 @implementation BBMediaTableViewController
@@ -126,6 +128,8 @@
     CGRect frame = self.navigationItem.titleView.frame;
     frame.size.width -= 60*3;
     self.navigationItem.titleView.frame = frame;
+    
+    [self.tableView setContentOffset:self.selectedScrollPosition animated:NO];
 }
 
 -(void)textFieldDidChange:(id) sender
@@ -320,9 +324,9 @@
         {
             BBMovieDetailsViewController *mediaVC = (BBMovieDetailsViewController *)segue.destinationViewController;
             mediaVC.mediaItem =  ((BBMovieTableViewCell*)sender).mediaItem;
+            self.selectedScrollPosition = self.tableView.contentOffset;
         }
     }
 }
-
 
 @end

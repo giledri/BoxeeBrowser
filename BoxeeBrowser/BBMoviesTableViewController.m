@@ -29,12 +29,12 @@
 
 -(BBFilter)readFilterAttribute
 {
-    return [self.appDelegate readIntegerAttribute:moviesFilter withDefaultValue:self.defaultFilter];
+    return (BBFilter)[self.appDelegate readIntegerAttribute:moviesFilter withDefaultValue:self.defaultFilter];
 }
 
 -(BBOrder)readOrderAttribute
 {
-    return [self.appDelegate readIntegerAttribute:moviesOrder withDefaultValue:DateAddedNewestFirst];
+    return (BBOrder)[self.appDelegate readIntegerAttribute:moviesOrder withDefaultValue:DateAddedNewestFirst];
 }
 
 -(void)storeFilterAttribute:(BBFilter)filter

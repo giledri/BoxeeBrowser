@@ -77,7 +77,7 @@
     switch (eventCode)
     {
         case NSStreamEventOpenCompleted:
-            NSLog(@"Opened connection");
+            //NSLog(@"Opened connection");
             break;
             
         case NSStreamEventHasBytesAvailable:
@@ -90,7 +90,7 @@
             }
             else if (bytesRead == 0)
             {
-                NSLog(@"download completed");
+                //NSLog(@"download completed");
                 [self stopReceive];
                 [self.eventSink downloadCompleted:self.fileName toLocalPath:self.localPath];
                 
@@ -141,7 +141,7 @@
             break;
             
         case NSStreamEventEndEncountered:
-            NSLog(@"end encountered");
+            //NSLog(@"end encountered");
             // ignore
             break;
 

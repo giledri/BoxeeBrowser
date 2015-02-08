@@ -24,6 +24,9 @@
     copy.idVideo = self.idVideo;
     copy.idFile = self.idFile;
     copy.strPath = self.strPath;
+    copy.idfFolder = self.idfFolder;
+    copy.strFolderPath = self.strFolderPath;
+    copy.isSharedFolder = self.isSharedFolder;
     copy.strTitle = self.strTitle;
     copy.iDuration = self.iDuration;
     copy.strDescription = self.strDescription;
@@ -37,6 +40,7 @@
     
     copy.strDirector = self.strDirector;
     copy.strCast = self.strCast;
+    copy.strGenre = self.strGenre;
     
     copy.dateAdded = self.dateAdded;
     

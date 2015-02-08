@@ -9,6 +9,7 @@
 #import "BBDataSource.h"
 #import "BBAppDelegate.h"
 #import "BBFtp.h"
+#import "BBTelnet.h"
 #import "BBMediaItem.h"
 #import "BBSeries.h"
 #import <sqlite3.h>
@@ -27,6 +28,7 @@
 
 @property (strong, nonatomic)BBAppDelegate *appDelegate;
 @property (strong, nonatomic)BBFtp *ftp;
+@property (strong, nonatomic)BBTelnet *telnet;
 
 @property (nonatomic)sqlite3 *catalogDb;
 
@@ -86,6 +88,11 @@
         [self.ftp downloadFile:@"/data/.boxee/UserData/Database/boxee_catalog.db"
                    toLocalPath:[self getDbLocalPath:@"tmp_boxee_catalog.db"]];
     }
+    
+    self.telnet = [[BBTelnet alloc] init];
+    NSString* ipAddress = [self.appDelegate readStringAttribute:settingsIpAddress withDefaultValue:@"10.0.0.1"];
+    [self.telnet connectToAddress:ipAddress AndPort:2323];
+    [self.telnet whenReceive:@"Password:" writeCommand:@"secret"];
     
     // start reading from local version o catalog db files
     self.boxeeCatalogPath = [self getDbLocalPath:@"boxee_catalog.db"];
@@ -315,19 +322,23 @@ const NSString *queryVideoFiles = @"\
                 vf.idVideo,             \
                 vf.idFile,              \
                 vf.strPath,             \
+                vf.idFolder,            \
+                mf.strPath,             \
+                (select count(1) from video_files where idFolder=vf.idFolder),   \
                 vf.strTitle,            \
                 vf.iDuration,           \
                 vf.iYear,               \
                 vf.strDescription,      \
                 vf.strExtDescription,   \
                 vf.strCover,            \
+                vf.strGenre,            \
                 vf.iDateAdded,          \
                 vf.iRating,             \
-                VF.strIMDBKey,          \
+                vf.strIMDBKey,          \
                 vf.iRTCriticsScore      \
         FROM video_files vf             \
         INNER JOIN media_folders mf ON vf.idFolder=mf.idFolder      \
-        GROUP BY strBoxeeId,vf.strSeriesId,vf.iSeason,vf.iEpisode";
+        GROUP BY vf.strBoxeeId, vf.strSeriesId, vf.iSeason, vf.iEpisode";
 
 const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
 
@@ -411,12 +422,16 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
     item.idVideo = sqlite3_column_int(statement, columnIndex++);
     item.idFile = sqlite3_column_int(statement, columnIndex++);
     item.strPath = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
+    item.idfFolder = sqlite3_column_int(statement, columnIndex++);
+    item.strFolderPath = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
+    item.isSharedFolder = (sqlite3_column_int(statement, columnIndex++) > 1);
     item.strTitle = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
     item.iDuration = sqlite3_column_int(statement, columnIndex++);
     item.iYear = sqlite3_column_int(statement, columnIndex++);
     item.strExtDescription = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
     item.strDescription = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
     item.strCover = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
+    item.strGenre = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
     item.dateAdded = [NSDate dateWithTimeIntervalSince1970:sqlite3_column_int(statement, columnIndex++)];
     item.iRating = sqlite3_column_int(statement, columnIndex++);
     item.strIMDBKey = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
@@ -546,7 +561,6 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
             dispatch_async(mainQueue, ^{
                 [self updateView];
             });
-
         }
         
         isRunning = NO;
@@ -599,6 +613,9 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
 {
     return (!item.strCover.length ||
             (!item.strDescription.length && !item.strExtDescription.length) ||
+            !item.strDirector ||
+            !item.strCast ||
+            !item.strGenre ||
             !item.iYear ||
             !item.iDuration ||
             !item.iRating);
@@ -624,6 +641,9 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
         NSString *strYear = [dict valueForKey:@"Year"];
         NSString *strRuntime = [dict valueForKey:@"Runtime"];
         NSString *strImdbRating = [dict valueForKey:@"imdbRating"];
+        NSString *strDirector = [dict valueForKey:@"Director"];
+        NSString *strActors = [dict valueForKey:@"Actors"];
+        NSString *strGenre = [dict valueForKey:@"Genre"];
         
         if (!item.strCover.length &&
             strPoster.length && ![strPoster isEqualToString:@"N/A"])
@@ -670,6 +690,27 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
                 itemUpdated = YES;
                 item.iRating = iRating;
             }
+        }
+        
+        if (!item.strDirector.length
+            && strDirector.length && ![strDirector isEqualToString:@"N/A"])
+        {
+            itemUpdated = YES;
+            item.strDirector = strDirector;
+        }
+
+        if (!item.strCast.length
+            && strActors.length && ![strActors isEqualToString:@"N/A"])
+        {
+            itemUpdated = YES;
+            item.strCast = strActors;
+        }
+
+        if (!item.strGenre.length
+            && strGenre.length && ![strGenre isEqualToString:@"N/A"])
+        {
+            itemUpdated = YES;
+            item.strGenre = strGenre;
         }
     }
     
@@ -735,6 +776,94 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
     }
     
     return imageData;
+}
+
+-(void) toggleIsWatched:(BBMediaItem*)item
+{
+    @try
+    {
+        [self.telnet whenReceive:@"#" writeCommand:@"sqlite3 /data/.boxee/UserData/profiles/gedri/Database/boxee_user_catalog.db"];
+        
+        NSString *query;
+        if (item.isWatched)
+        {
+            query = [NSString stringWithFormat:@"DELETE FROM watched WHERE strBoxeeId='%@';", item.strBoxeeId];
+        }
+        else
+        {
+            query = [NSString stringWithFormat:@"INSERT INTO watched (strPath, strBoxeeId, iPlayCount, fPositionInSeconds) VALUES ('%@', '%@', 1, 0);", item.strPath, item.strBoxeeId];
+        }
+        [self.telnet whenReceive:@"sqlite>" writeCommand:query];
+        
+        [self.telnet whenReceive:@"sqlite>" writeCommand:@".exit"];
+        
+        item.isWatched = !item.isWatched;
+        if (item.isWatched)
+        {
+            [self.unWatchedMovies removeObject:item];
+            [self.unWatchedShows removeObject:item];
+        }
+        else
+        {
+            if ([self.allShows containsObject:item])
+            {
+                [self.unWatchedShows addObject:item];
+            }
+            else
+            {
+                [self.unWatchedMovies addObject:item];
+            }
+        }
+    }
+    @catch (NSException * e) {
+        NSLog(@"Exception: %@", e);
+    }
+    @finally {
+        dispatch_queue_t mainQueue = dispatch_get_main_queue();
+        dispatch_async(mainQueue, ^{
+           [self updateView];
+        });
+    }
+}
+
+-(BOOL) deleteMedia:(BBMediaItem *)item
+{
+    @try
+    {
+        //delete video file or folder path from storage
+        [self.telnet whenReceive:@"#" writeCommand:[NSString stringWithFormat:@"rm -r \"%@\"",
+                                                (item.isSharedFolder ? item.strPath : item.strFolderPath)]];
+
+        //delete video file and folder path from db
+        [self.telnet whenReceive:@"#" writeCommand:@"sqlite3 /data/.boxee/UserData/Database/boxee_catalog.db"];
+        
+        [self.telnet whenReceive:@"sqlite>" writeCommand:[NSString stringWithFormat:@"DELETE FROM video_files WHERE strBoxeeId='%@';", item.strBoxeeId]];
+        if (!item.isSharedFolder)
+        {
+            [self.telnet whenReceive:@"sqlite>" writeCommand:[NSString stringWithFormat:@"DELETE FROM media_folders WHERE idFolder=%d;", item.idfFolder]];
+        }
+        
+        [self.telnet whenReceive:@"sqlite>" writeCommand:@".exit"];
+
+        [self.videoItemsByKey removeObjectForKey:item.strBoxeeId];
+        [self.allMovies removeObject:item];
+        [self.unWatchedMovies removeObject:item];
+        [self.allShows removeObject:item];
+        [self.unWatchedShows removeObject:item];
+        
+        return TRUE;
+    }
+    @catch (NSException * e) {
+        NSLog(@"Exception: %@", e);
+        
+        return FALSE;
+    }
+    @finally {
+        dispatch_queue_t mainQueue = dispatch_get_main_queue();
+        dispatch_async(mainQueue, ^{
+            [self updateView];
+        });
+    }
 }
 
 

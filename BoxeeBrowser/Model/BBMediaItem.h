@@ -15,6 +15,9 @@
 @property (nonatomic) int idVideo;
 @property (nonatomic) int idFile;
 @property (strong, nonatomic) NSString *strPath;
+@property (nonatomic) int idfFolder;
+@property (strong, nonatomic) NSString *strFolderPath;
+@property (nonatomic) BOOL isSharedFolder;
 @property (strong, nonatomic) NSString *strTitle;
 @property (nonatomic) NSInteger iDuration;
 @property (strong, nonatomic) NSString *strDescription; // seconds
@@ -28,6 +31,8 @@
 
 @property (strong, nonatomic) NSString *strDirector;
 @property (strong, nonatomic) NSString *strCast;
+@property (strong, nonatomic) NSString *strGenre;
+
 
 @property (nonatomic) NSDate *dateAdded;
 
