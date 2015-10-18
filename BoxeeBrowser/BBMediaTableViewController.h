@@ -27,4 +27,6 @@
 
 -(NSArray*)itemsFromDataSource;
 
+-(void)updateTitleWithCount:(NSInteger)count;
+
 @end

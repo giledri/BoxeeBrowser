@@ -26,6 +26,7 @@ const NSString* moviesOrder = @"moviesOrder";
 const NSString* showsFilter = @"showsFilter";
 const NSString* showsOrder = @"showsOrder";
 const NSString* settingsIpAddress = @"settingsIpAddress";
+const NSString* settingsLoginName = @"settingsLoginName";
 const NSString* settingsLastSyncTime = @"settingsLastSyncTime";
 const NSString* settingsSyncOnStatup = @"settingsSyncOnStatup";
 

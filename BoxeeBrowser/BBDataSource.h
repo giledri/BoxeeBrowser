@@ -41,6 +41,8 @@ typedef enum {
 
 @property (strong, nonatomic) NSArray *movies;
 @property (strong, nonatomic) NSArray *shows;
+@property (strong, nonatomic) NSDictionary *showsBySeries;
+@property (strong, nonatomic) NSArray *series;
 
 -(BBDataSource*)initWithDelegate:(id<BBDataSourceDelegate>) delegate;
 

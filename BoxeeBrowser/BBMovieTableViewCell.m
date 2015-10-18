@@ -14,5 +14,4 @@
 
 @implementation BBMovieTableViewCell
 
-
 @end

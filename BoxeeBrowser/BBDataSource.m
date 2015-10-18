@@ -21,7 +21,7 @@
 @property (strong, nonatomic) NSString *boxeeCatalogPath;
 @property (strong, nonatomic) NSString *boxeeUserCatalogPath;
 
-@property (strong, nonatomic) NSMutableDictionary *videoItemsByKey;
+@property (strong, nonatomic) NSMutableDictionary *allItemsByKey;
 @property (strong, nonatomic) NSMutableDictionary *updatedItemsByKey;
 
 @property (strong, nonatomic) NSMutableDictionary* unTouched;
@@ -41,6 +41,9 @@
 
 @property (strong, nonatomic) NSMutableArray *allShows;
 @property (strong, nonatomic) NSMutableArray *unWatchedShows;
+
+@property (strong, nonatomic) NSMutableArray *allSeries;
+
 
 @property (nonatomic)BOOL *isRunningPtr;
 @property (nonatomic)BOOL *abortRunningPtr;
@@ -69,12 +72,13 @@
     
     self.appDelegate = (BBAppDelegate *)[[UIApplication sharedApplication] delegate];
 
-    self.videoItemsByKey = [[NSMutableDictionary alloc] init];
+    self.allItemsByKey = [[NSMutableDictionary alloc] init];
     self.allMovies = [[NSMutableArray alloc] init];
     self.unWatchedMovies = [[NSMutableArray alloc] init];
     self.allShows = [[NSMutableArray alloc] init];
     self.unWatchedShows = [[NSMutableArray alloc] init];
     self.updatedItemsByKey = [[NSMutableDictionary alloc] init];
+    self.allSeries = [[NSMutableArray alloc] init];
     
     BOOL syncOnStartup = [self.appDelegate readIntegerAttribute:settingsSyncOnStatup withDefaultValue:TRUE];
     if (forceSync || syncOnStartup)
@@ -82,8 +86,9 @@
         // start FTP download of catalog db files
         self.ftp = [[BBFtp alloc] init];
         NSString* ipAddress = [self.appDelegate readStringAttribute:settingsIpAddress withDefaultValue:@"10.0.0.1"];
+        NSString* loginName = [self.appDelegate readStringAttribute:settingsLoginName withDefaultValue:@"login"];
         [self.ftp initWithAddress:ipAddress andEventSink:self];
-        [self.ftp downloadFile:@"/data/.boxee/UserData/profiles/gedri/Database/boxee_user_catalog.db"
+        [self.ftp downloadFile:[NSString stringWithFormat:@"/data/.boxee/UserData/profiles/%@/Database/boxee_user_catalog.db", loginName]
                    toLocalPath:[self getDbLocalPath:@"tmp_boxee_user_catalog.db"]];
         [self.ftp downloadFile:@"/data/.boxee/UserData/Database/boxee_catalog.db"
                    toLocalPath:[self getDbLocalPath:@"tmp_boxee_catalog.db"]];
@@ -172,8 +177,26 @@
         case AllShows:
         case UnwatchedShows:
             self.shows = sortedList;
+            
+            NSMutableDictionary *showsBySeries = [[NSMutableDictionary alloc] init];
+            for (BBMediaItem *show in sortedList)
+            {
+                NSMutableArray *shows = [showsBySeries objectForKey:show.strSeriesId];
+                if (shows == nil)
+                {
+                    shows = [[NSMutableArray alloc] init];
+                    [showsBySeries setObject:shows forKey:show.strSeriesId];
+                }
+                [shows addObject:show];
+            }
+            
+            self.showsBySeries = showsBySeries;
+            
             break;
     }
+    
+    self.series = self.allSeries;
+    
     
     [self.delegate reloadData];
 }
@@ -340,7 +363,7 @@ const NSString *queryVideoFiles = @"\
         INNER JOIN media_folders mf ON vf.idFolder=mf.idFolder      \
         GROUP BY vf.strBoxeeId, vf.strSeriesId, vf.iSeason, vf.iEpisode";
 
-const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
+const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeId != ''";
 
 - (void)copyInfoFromUpdatedItem:(BBMediaItem *)updatedItem toItem:(BBMediaItem *)item
 {
@@ -357,36 +380,32 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
 
 - (BBMediaItem *)newOrExistingItemByBoxeeId:(NSString *)strBoxeeId andSeriesId:(NSString *)strSeriesId
 {
-    NSMutableDictionary *videoItemsByKey;
+    BBSeries *series;
     
     if ([strSeriesId length])
     {
-        BBSeries *series = [self.videoItemsByKey valueForKey:strSeriesId];
+        BBSeries *series = [self.allItemsByKey valueForKey:strSeriesId];
         if (series == nil)
         {
             series = [[BBSeries alloc] initWithSeriesId:strSeriesId];
-            [self.videoItemsByKey setValue:series forKey:strSeriesId];
+            [self.allItemsByKey setValue:series forKey:strSeriesId];
             
             [self readSeriesInfo:strSeriesId andUpdateSeries:series];
+            [self.allSeries addObject:series];
         }
-        
-        videoItemsByKey = series.shows;
-    }
-    else
-    {
-        videoItemsByKey = self.videoItemsByKey;
     }
   
-    BBMediaItem *item = [videoItemsByKey valueForKey:strBoxeeId];
+    BBMediaItem *item = [self.allItemsByKey valueForKey:strBoxeeId];
     
     if (item == nil)
     {
         item = [[BBMediaItem alloc] initWithBoxeeId:strBoxeeId andSeriesId:strSeriesId];
         
-        [videoItemsByKey setValue:item forKey:strBoxeeId];
+        [self.allItemsByKey setValue:item forKey:strBoxeeId];
         
         if ([strSeriesId length])
         {
+            [series.shows setValue:item forKey:strBoxeeId];
             [self.allShows addObject:item];
         }
         else
@@ -456,7 +475,7 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
 {
     NSString* strBoxeeId = [[NSString alloc]initWithUTF8String:(const char *) sqlite3_column_text(statement, 0)];
     
-    BBMediaItem *item = [self.videoItemsByKey valueForKey:strBoxeeId];
+    BBMediaItem *item = [self.allItemsByKey valueForKey:strBoxeeId];
     
     if (item != nil)
     {
@@ -494,7 +513,7 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
     dispatch_async(self.queue, ^
     {
         isRunning= YES;
-        self.unTouched = [[NSMutableDictionary alloc] initWithDictionary:self.videoItemsByKey];
+        self.unTouched = [[NSMutableDictionary alloc] initWithDictionary:self.allItemsByKey];
         
         const char *catalogDbPath = [self.boxeeCatalogPath UTF8String];
         const char * userCatalogDbPath = [self.boxeeUserCatalogPath UTF8String];
@@ -524,10 +543,10 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
         {
             for (NSString *keyToDelete in self.unTouched.allKeys)
             {
-                BBMediaItem *item = [self.videoItemsByKey valueForKey:keyToDelete];
+                BBMediaItem *item = [self.allItemsByKey valueForKey:keyToDelete];
                 [self.allMovies removeObject:item];
                 [self.allShows removeObject:item];
-                [self.videoItemsByKey removeObjectForKey:keyToDelete];
+                [self.allItemsByKey removeObjectForKey:keyToDelete];
             }
             
             [self.unWatchedMovies removeAllObjects];
@@ -744,15 +763,20 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
     NSLog(@"image not in cache - downloading image (item: %@ BoxeeId: %@ IMDB Id: %@ url: %@)", item.strTitle, item.strBoxeeId, item.strIMDBKey, item.strCover);
     
     const char *queueName = [[@"LoadCellImageQueue" stringByAppendingString:item.strBoxeeId] cStringUsingEncoding:[NSString defaultCStringEncoding]];
-    dispatch_queue_t queue = dispatch_queue_create(queueName, NULL);
+    dispatch_queue_t queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_SERIAL);
     dispatch_async(queue, ^{
-        item.imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:item.strCover]];
-        dispatch_queue_t mainQueue = dispatch_get_main_queue();
-        dispatch_async(mainQueue, ^{
-            NSLog(@"updating image in cell (item: %@ BoxeeId: %@ IMDB Id: %@)", item.strTitle, item.strBoxeeId, item.strIMDBKey);
-            completionBlock();
-        });
-        [item.imageData writeToFile:cachedImagePath atomically:YES];
+        NSURL *url = [NSURL URLWithString:[item.strCover stringByReplacingOccurrencesOfString:@".org/" withString:@".org:80/"]];
+        NSError *error = nil;
+        item.imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];
+        if (item.imageData != nil)
+        {
+            dispatch_queue_t mainQueue = dispatch_get_main_queue();
+            dispatch_async(mainQueue, ^{
+                NSLog(@"updating image in cell (item: %@ BoxeeId: %@ IMDB Id: %@)", item.strTitle, item.strBoxeeId, item.strIMDBKey);
+                completionBlock();
+            });
+            [item.imageData writeToFile:cachedImagePath atomically:YES];
+        }
     });
 }
 
@@ -782,7 +806,8 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
 {
     @try
     {
-        [self.telnet whenReceive:@"#" writeCommand:@"sqlite3 /data/.boxee/UserData/profiles/gedri/Database/boxee_user_catalog.db"];
+        NSString* loginName = [self.appDelegate readStringAttribute:settingsLoginName withDefaultValue:@"login"];
+        [self.telnet whenReceive:@"#" writeCommand:[NSString stringWithFormat:@"sqlite3 /data/.boxee/UserData/profiles/%@/Database/boxee_user_catalog.db", loginName]];
         
         NSString *query;
         if (item.isWatched)
@@ -845,7 +870,7 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched";
         
         [self.telnet whenReceive:@"sqlite>" writeCommand:@".exit"];
 
-        [self.videoItemsByKey removeObjectForKey:item.strBoxeeId];
+        [self.allItemsByKey removeObjectForKey:item.strBoxeeId];
         [self.allMovies removeObject:item];
         [self.unWatchedMovies removeObject:item];
         [self.allShows removeObject:item];

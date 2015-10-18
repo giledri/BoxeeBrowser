@@ -115,12 +115,18 @@
     self.navigationItem.rightBarButtonItems  = [NSArray arrayWithObjects:sortButton, self.filterButton, searchButton, searchBox, dummyButton, nil];
     
     [self.navigationItem.titleView setContentMode:UIViewContentModeCenter];
-    [self updateTitleWithCount:[self.tableView numberOfRowsInSection:0]];
     
+    NSInteger count = 0;
+    NSInteger sectionsCount = [self.tableView numberOfSections];
+    for(int section = 0; section < sectionsCount; section++ )
+    {
+        count += [self.tableView numberOfRowsInSection:section];
+    }
+    [self updateTitleWithCount:count];
     
     [self.dataSource updateView];
 }
-
+/*
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -131,7 +137,7 @@
     
     [self.tableView setContentOffset:self.selectedScrollPosition animated:NO];
 }
-
+*/
 -(void)textFieldDidChange:(id) sender
 {
     if (sender == self.searchTextField)
@@ -255,7 +261,7 @@
     [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     [self.tableView reloadData];
     
-    if ([self.tableView numberOfRowsInSection:0] == 0
+    if (([self.tableView numberOfSections] == 0 || [self.tableView numberOfRowsInSection:0] == 0)
         && (self.filter == UnwatchedShows || self.filter == UnwatchedMovies)
         && self.isInitialFilter)
     {
@@ -324,6 +330,15 @@
         {
             BBMovieDetailsViewController *mediaVC = (BBMovieDetailsViewController *)segue.destinationViewController;
             mediaVC.mediaItem =  ((BBMovieTableViewCell*)sender).mediaItem;
+            self.selectedScrollPosition = self.tableView.contentOffset;
+        }
+    }
+    else if ([segue.identifier isEqualToString:@"PushShowDetails"])
+    {
+        if ([segue.destinationViewController isKindOfClass:[BBMovieDetailsViewController class]])
+        {
+            BBMovieDetailsViewController *mediaVC = (BBMovieDetailsViewController *)segue.destinationViewController;
+            mediaVC.mediaItem =  ((BBShowTableViewCell*)sender).mediaItem;
             self.selectedScrollPosition = self.tableView.contentOffset;
         }
     }

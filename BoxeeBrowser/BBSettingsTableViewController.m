@@ -8,11 +8,14 @@
 
 #import "BBSettingsTableViewController.h"
 #import "BBAppDelegate.h"
+#import "UITextFieldIpAddress.h"
 #include <arpa/inet.h>
 
 @interface BBSettingsTableViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *ipAddressLabel;
 @property (weak, nonatomic) IBOutlet UITextField *ipAddress;
+@property (weak, nonatomic) IBOutlet UILabel *loginNameLabel;
+@property (weak, nonatomic) IBOutlet UITextField *loginName;
 @property (weak, nonatomic) IBOutlet UILabel *lastSyncTime;
 @property (weak, nonatomic) IBOutlet UISwitch *syncOnStartupSwitch;
 @property (weak, nonatomic) IBOutlet UIButton *syncNowButton;
@@ -47,12 +50,21 @@
 
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 && indexPath.row == 0)
+    if (indexPath.section == 0)
     {
-        [self.ipAddress setDelegate:self];
-        self.ipAddress.text = [self.appDelegate readStringAttribute:settingsIpAddress withDefaultValue:@"10.0.0.1"];
+        if (indexPath.row == 0)
+        {
+            [self.ipAddress setDelegate:self];
+            self.ipAddress.text = [self.appDelegate readStringAttribute:settingsIpAddress withDefaultValue:@"10.0.0.1"];
+        }
+        
+        if (indexPath.row == 1)
+        {
+            [self.loginName setDelegate:self];
+            self.loginName.text = [self.appDelegate readStringAttribute:settingsLoginName withDefaultValue:@"[login]"];
+        }
     }
-
+    
     if (indexPath.section == 1)
     {
         if (indexPath.row == 0)
@@ -65,6 +77,17 @@
         {
             BOOL syncOnStartup = [self.appDelegate readIntegerAttribute:settingsSyncOnStatup withDefaultValue:TRUE];
             self.syncOnStartupSwitch.on = syncOnStartup;
+        }
+    }
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (![textField isKindOfClass:[UITextFieldIpAddress class]])
+    {
+        if ([textField.text isEqualToString:@"[login]"])
+        {
+            textField.text = @"";
         }
     }
 }
@@ -82,26 +105,42 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    NSString* ipAddress = [self.appDelegate readStringAttribute:settingsIpAddress withDefaultValue:@"10.0.0.1"];
-    
-    if (![textField.text isEqualToString:ipAddress])
+    if ([textField isKindOfClass:[UITextFieldIpAddress class]])
     {
-        [self.appDelegate storeAttribute:settingsIpAddress withStringValue:textField.text];
-        self.appDelegate.dataSource = [[BBDataSource alloc] initWithDelegate:self forceSyncDatabase:TRUE];
+        NSString* ipAddress = [self.appDelegate readStringAttribute:settingsIpAddress withDefaultValue:@"10.0.0.1"];
+        
+        if (![textField.text isEqualToString:ipAddress])
+        {
+            [self.appDelegate storeAttribute:settingsIpAddress withStringValue:textField.text];
+            self.appDelegate.dataSource = [[BBDataSource alloc] initWithDelegate:self forceSyncDatabase:TRUE];
+        }
     }
-    
+    else
+    {
+        NSString* loginName = [self.appDelegate readStringAttribute:settingsLoginName withDefaultValue:@"[login]"];
+        
+        if (![textField.text isEqualToString:loginName])
+        {
+            [self.appDelegate storeAttribute:settingsLoginName withStringValue:textField.text];
+            self.appDelegate.dataSource = [[BBDataSource alloc] initWithDelegate:self forceSyncDatabase:TRUE];
+        }
+    }
 }
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
-    const char *utf8 = [textField.text UTF8String];
-    int success;
+    int success = 1;
     
-    struct in_addr dst;
-    success = inet_pton(AF_INET, utf8, &dst);
-    if (success != 1) {
-        struct in6_addr dst6;
-        success = inet_pton(AF_INET6, utf8, &dst6);
+    if ([textField isKindOfClass:[UITextFieldIpAddress class]])
+    {
+        const char *utf8 = [textField.text UTF8String];
+        
+        struct in_addr dst;
+        success = inet_pton(AF_INET, utf8, &dst);
+        if (success != 1) {
+            struct in6_addr dst6;
+            success = inet_pton(AF_INET6, utf8, &dst6);
+        }
     }
     
     return (success == 1);

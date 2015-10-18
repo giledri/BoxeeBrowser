@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F6AB3DF1BC3128B00CD2848 /* UITextFieldIpAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6AB3DE1BC3128B00CD2848 /* UITextFieldIpAddress.m */; };
 		7FE276A01A798718000C8A28 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7FE2769F1A798718000C8A28 /* Entitlements.plist */; };
 		7FE276A31A7993B2000C8A28 /* BBMediaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FE276A21A7993B2000C8A28 /* BBMediaTableViewCell.m */; };
 		FB05E49C191E4F2D00CE5617 /* BBSortViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB05E49B191E4F2D00CE5617 /* BBSortViewController.m */; };
@@ -21,12 +22,6 @@
 		FB15614F1911A268006AD3B3 /* BoxeeBrowser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FB15614D1911A268006AD3B3 /* BoxeeBrowser.xcdatamodeld */; };
 		FB1561521911A268006AD3B3 /* BBMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1561511911A268006AD3B3 /* BBMasterViewController.m */; };
 		FB1561571911A268006AD3B3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FB1561561911A268006AD3B3 /* Images.xcassets */; };
-		FB15615E1911A268006AD3B3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB15615D1911A268006AD3B3 /* XCTest.framework */; };
-		FB15615F1911A268006AD3B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1561331911A268006AD3B3 /* Foundation.framework */; };
-		FB1561601911A268006AD3B3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1561371911A268006AD3B3 /* UIKit.framework */; };
-		FB1561611911A268006AD3B3 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1561391911A268006AD3B3 /* CoreData.framework */; };
-		FB1561691911A268006AD3B3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FB1561671911A268006AD3B3 /* InfoPlist.strings */; };
-		FB15616B1911A268006AD3B3 /* BoxeeBrowserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB15616A1911A268006AD3B3 /* BoxeeBrowserTests.m */; };
 		FB1561801911A3CC006AD3B3 /* BBEnhancedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1561751911A3CC006AD3B3 /* BBEnhancedLabel.m */; };
 		FB1561811911A3CC006AD3B3 /* BBFtp.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1561771911A3CC006AD3B3 /* BBFtp.m */; };
 		FB1561841911A3CC006AD3B3 /* BBTelnet.m in Sources */ = {isa = PBXBuildFile; fileRef = FB15617E1911A3CC006AD3B3 /* BBTelnet.m */; };
@@ -64,17 +59,9 @@
 		FBEE3956191EBFBD002F78FC /* button-watched.png in Resources */ = {isa = PBXBuildFile; fileRef = FBEE3955191EBFBD002F78FC /* button-watched.png */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		FB1561621911A268006AD3B3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FB1561281911A268006AD3B3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FB15612F1911A268006AD3B3;
-			remoteInfo = BoxeeBrowser;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
+		7F6AB3DD1BC3128B00CD2848 /* UITextFieldIpAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextFieldIpAddress.h; sourceTree = "<group>"; };
+		7F6AB3DE1BC3128B00CD2848 /* UITextFieldIpAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITextFieldIpAddress.m; sourceTree = "<group>"; };
 		7FE2769F1A798718000C8A28 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		7FE276A11A7993B2000C8A28 /* BBMediaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMediaTableViewCell.h; sourceTree = "<group>"; };
 		7FE276A21A7993B2000C8A28 /* BBMediaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMediaTableViewCell.m; sourceTree = "<group>"; };
@@ -96,7 +83,6 @@
 		FB1561501911A268006AD3B3 /* BBMasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMasterViewController.h; sourceTree = "<group>"; };
 		FB1561511911A268006AD3B3 /* BBMasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BBMasterViewController.m; sourceTree = "<group>"; };
 		FB1561561911A268006AD3B3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		FB15615C1911A268006AD3B3 /* BoxeeBrowserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BoxeeBrowserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB15615D1911A268006AD3B3 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		FB1561661911A268006AD3B3 /* BoxeeBrowserTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BoxeeBrowserTests-Info.plist"; sourceTree = "<group>"; };
 		FB1561681911A268006AD3B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -172,17 +158,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB1561591911A268006AD3B3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FB15615E1911A268006AD3B3 /* XCTest.framework in Frameworks */,
-				FB1561611911A268006AD3B3 /* CoreData.framework in Frameworks */,
-				FB1561601911A268006AD3B3 /* UIKit.framework in Frameworks */,
-				FB15615F1911A268006AD3B3 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -201,7 +176,6 @@
 			isa = PBXGroup;
 			children = (
 				FB1561301911A268006AD3B3 /* BoxeeBrowser.app */,
-				FB15615C1911A268006AD3B3 /* BoxeeBrowserTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -312,6 +286,8 @@
 				FB32109D192D3F330047CF48 /* BBSplitViewController.m */,
 				FB3CD97F1937CDC900BE4773 /* BBBarTextField.h */,
 				FB3CD9801937CDC900BE4773 /* BBBarTextField.m */,
+				7F6AB3DD1BC3128B00CD2848 /* UITextFieldIpAddress.h */,
+				7F6AB3DE1BC3128B00CD2848 /* UITextFieldIpAddress.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -374,24 +350,6 @@
 			productReference = FB1561301911A268006AD3B3 /* BoxeeBrowser.app */;
 			productType = "com.apple.product-type.application";
 		};
-		FB15615B1911A268006AD3B3 /* BoxeeBrowserTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FB1561711911A268006AD3B3 /* Build configuration list for PBXNativeTarget "BoxeeBrowserTests" */;
-			buildPhases = (
-				FB1561581911A268006AD3B3 /* Sources */,
-				FB1561591911A268006AD3B3 /* Frameworks */,
-				FB15615A1911A268006AD3B3 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				FB1561631911A268006AD3B3 /* PBXTargetDependency */,
-			);
-			name = BoxeeBrowserTests;
-			productName = BoxeeBrowserTests;
-			productReference = FB15615C1911A268006AD3B3 /* BoxeeBrowserTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -402,8 +360,8 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Gil Edri";
 				TargetAttributes = {
-					FB15615B1911A268006AD3B3 = {
-						TestTargetID = FB15612F1911A268006AD3B3;
+					FB15612F1911A268006AD3B3 = {
+						DevelopmentTeam = J8FJA8NP7Q;
 					};
 				};
 			};
@@ -421,7 +379,6 @@
 			projectRoot = "";
 			targets = (
 				FB15612F1911A268006AD3B3 /* BoxeeBrowser */,
-				FB15615B1911A268006AD3B3 /* BoxeeBrowserTests */,
 			);
 		};
 /* End PBXProject section */
@@ -452,14 +409,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB15615A1911A268006AD3B3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FB1561691911A268006AD3B3 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -478,6 +427,7 @@
 				FBA796571917BC72009DF064 /* BBDataSource.m in Sources */,
 				FB9599E91925572A00AC2237 /* BBShowsTableViewController.m in Sources */,
 				FB27CDE51922B789001D22FB /* BBMoviesTableViewController.m in Sources */,
+				7F6AB3DF1BC3128B00CD2848 /* UITextFieldIpAddress.m in Sources */,
 				FBA95A771A32634E009CA3B3 /* BBShowTableViewCell.m in Sources */,
 				FB3CD9811937CDC900BE4773 /* BBBarTextField.m in Sources */,
 				FB1561421911A268006AD3B3 /* main.m in Sources */,
@@ -496,23 +446,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB1561581911A268006AD3B3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FB15616B1911A268006AD3B3 /* BoxeeBrowserTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		FB1561631911A268006AD3B3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FB15612F1911A268006AD3B3 /* BoxeeBrowser */;
-			targetProxy = FB1561621911A268006AD3B3 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		FB15613E1911A268006AD3B3 /* InfoPlist.strings */ = {
@@ -624,11 +558,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = appicon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BoxeeBrowser/BoxeeBrowser-Prefix.pch";
 				INFOPLIST_FILE = "BoxeeBrowser/BoxeeBrowser-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
@@ -641,56 +575,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = appicon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BoxeeBrowser/BoxeeBrowser-Prefix.pch";
 				INFOPLIST_FILE = "BoxeeBrowser/BoxeeBrowser-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		FB1561721911A268006AD3B3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/BoxeeBrowser.app/BoxeeBrowser";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "BoxeeBrowser/BoxeeBrowser-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "BoxeeBrowserTests/BoxeeBrowserTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		FB1561731911A268006AD3B3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/BoxeeBrowser.app/BoxeeBrowser";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "BoxeeBrowser/BoxeeBrowser-Prefix.pch";
-				INFOPLIST_FILE = "BoxeeBrowserTests/BoxeeBrowserTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -711,15 +603,6 @@
 			buildConfigurations = (
 				FB15616F1911A268006AD3B3 /* Debug */,
 				FB1561701911A268006AD3B3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FB1561711911A268006AD3B3 /* Build configuration list for PBXNativeTarget "BoxeeBrowserTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FB1561721911A268006AD3B3 /* Debug */,
-				FB1561731911A268006AD3B3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

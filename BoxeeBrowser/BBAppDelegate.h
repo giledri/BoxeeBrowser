@@ -29,6 +29,7 @@ extern const NSString* moviesOrder;
 extern const NSString* showsFilter;
 extern const NSString* showsOrder;
 extern const NSString* settingsIpAddress;
+extern const NSString* settingsLoginName;
 extern const NSString* settingsLastSyncTime;
 extern const NSString* settingsSyncOnStatup;
 
