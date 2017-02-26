@@ -26,11 +26,12 @@
     return copy;
 }
 
-- (BBSeries*) initWithSeriesId:(NSString*)strSeriesId
+- (BBSeries*) initWithSeriesId:(NSString*)strSeriesId andSeriesTitle:(NSString *)strSeriesTitle
 {
     self = [super init];
     
     self.strSeriesId = strSeriesId;
+    self.strTitle = strSeriesTitle;
     self.shows = [[NSMutableDictionary alloc] init];
     
     return self;

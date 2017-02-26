@@ -86,12 +86,15 @@
         // start FTP download of catalog db files
         self.ftp = [[BBFtp alloc] init];
         NSString* ipAddress = [self.appDelegate readStringAttribute:settingsIpAddress withDefaultValue:@"10.0.0.1"];
-        NSString* loginName = [self.appDelegate readStringAttribute:settingsLoginName withDefaultValue:@"login"];
-        [self.ftp initWithAddress:ipAddress andEventSink:self];
-        [self.ftp downloadFile:[NSString stringWithFormat:@"/data/.boxee/UserData/profiles/%@/Database/boxee_user_catalog.db", loginName]
-                   toLocalPath:[self getDbLocalPath:@"tmp_boxee_user_catalog.db"]];
-        [self.ftp downloadFile:@"/data/.boxee/UserData/Database/boxee_catalog.db"
-                   toLocalPath:[self getDbLocalPath:@"tmp_boxee_catalog.db"]];
+        NSString* loginName = [self.appDelegate readStringAttribute:settingsLoginName withDefaultValue:@"[login]"];
+        if (![loginName isEqualToString:@"[login]"])
+        {
+            [self.ftp initWithAddress:ipAddress andEventSink:self];
+            [self.ftp downloadFile:[NSString stringWithFormat:@"/data/.boxee/UserData/profiles/%@/Database/boxee_user_catalog.db", loginName]
+                       toLocalPath:[self getDbLocalPath:@"tmp_boxee_user_catalog.db"]];
+            [self.ftp downloadFile:@"/data/.boxee/UserData/Database/boxee_catalog.db"
+                       toLocalPath:[self getDbLocalPath:@"tmp_boxee_catalog.db"]];
+        }
     }
     
     self.telnet = [[BBTelnet alloc] init];
@@ -99,7 +102,7 @@
     [self.telnet connectToAddress:ipAddress AndPort:2323];
     [self.telnet whenReceive:@"Password:" writeCommand:@"secret"];
     
-    // start reading from local version o catalog db files
+    // start reading from local catalog db files
     self.boxeeCatalogPath = [self getDbLocalPath:@"boxee_catalog.db"];
     self.boxeeUserCatalogPath = [self getDbLocalPath:@"boxee_user_catalog.db"];
     
@@ -161,8 +164,17 @@
                 return [[(BBMediaItem *)obj2 strTitle] caseInsensitiveCompare:[(BBMediaItem *)obj1 strTitle]];
             case DateAddedNewestFirst:
                 return [[(BBMediaItem *)obj2 dateAdded] compare:[(BBMediaItem *)obj1 dateAdded]];
-            case dateAddedOldestFirst:
+            case DateAddedOldestFirst:
                 return [[(BBMediaItem *)obj1 dateAdded] compare:[(BBMediaItem *)obj2 dateAdded]];
+            case SeriesAndEpisodeOrder:
+                if ([(BBMediaItem *)obj1 iSeason] < [(BBMediaItem *)obj2 iSeason])
+                    return NSOrderedAscending;
+                else if ([(BBMediaItem *)obj1 iSeason] > [(BBMediaItem *)obj2 iSeason])
+                    return NSOrderedDescending;
+                else if ([(BBMediaItem *)obj1 iEpisode] < [(BBMediaItem *)obj2 iEpisode])
+                    return NSOrderedAscending;
+                else if ([(BBMediaItem *)obj1 iEpisode] > [(BBMediaItem *)obj2 iEpisode])
+                    return NSOrderedDescending;
             default:
                 return NSOrderedSame;
         }
@@ -277,7 +289,7 @@
         
         const char *query_stmt = [querySQL UTF8String];
         
-        sqlite3_stmt    *statement;
+        sqlite3_stmt *statement;
         
         if (sqlite3_prepare_v2(database, query_stmt, -1, &statement, NULL) == SQLITE_OK)
         {
@@ -339,12 +351,13 @@
 
 const NSString *queryVideoFiles = @"\
         SELECT  vf.strBoxeeId,          \
+                vf.strPath,             \
                 vf.strSeriesId,         \
+                ser.strTitle,           \
                 vf.iSeason,             \
                 vf.iEpisode,            \
                 vf.idVideo,             \
                 vf.idFile,              \
-                vf.strPath,             \
                 vf.idFolder,            \
                 mf.strPath,             \
                 (select count(1) from video_files where idFolder=vf.idFolder),   \
@@ -361,9 +374,13 @@ const NSString *queryVideoFiles = @"\
                 vf.iRTCriticsScore      \
         FROM video_files vf             \
         INNER JOIN media_folders mf ON vf.idFolder=mf.idFolder      \
+        LEFT OUTER JOIN series ser ON ser.strBoxeeId=vf.strSeriesId      \
         GROUP BY vf.strBoxeeId, vf.strSeriesId, vf.iSeason, vf.iEpisode";
 
-const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeId != ''";
+const NSString *queryWatched =  @"\
+    SELECT strBoxeeId FROM watched WHERE strBoxeeId != '' \
+    UNION   \
+    SELECT strPath as strBoxeeId FROM watched WHERE strBoxeeId = '' AND strPath != ''";
 
 - (void)copyInfoFromUpdatedItem:(BBMediaItem *)updatedItem toItem:(BBMediaItem *)item
 {
@@ -378,7 +395,7 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
     item.iRTCriticsScore = updatedItem.iRTCriticsScore;
 }
 
-- (BBMediaItem *)newOrExistingItemByBoxeeId:(NSString *)strBoxeeId andSeriesId:(NSString *)strSeriesId
+- (BBMediaItem *)newOrExistingItemByBoxeeId:(NSString *)strBoxeeId Path:(NSString *)strPath orSeriesId:(NSString *)strSeriesId andSeriesTitle:(NSString *)strSeriesTitle
 {
     BBSeries *series;
     
@@ -387,12 +404,18 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
         BBSeries *series = [self.allItemsByKey valueForKey:strSeriesId];
         if (series == nil)
         {
-            series = [[BBSeries alloc] initWithSeriesId:strSeriesId];
+            series = [[BBSeries alloc] initWithSeriesId:strSeriesId andSeriesTitle:strSeriesTitle];
             [self.allItemsByKey setValue:series forKey:strSeriesId];
             
             [self readSeriesInfo:strSeriesId andUpdateSeries:series];
             [self.allSeries addObject:series];
         }
+    }
+    
+    
+    if ([strBoxeeId length] == 0)
+    {
+        strBoxeeId = strPath;
     }
   
     BBMediaItem *item = [self.allItemsByKey valueForKey:strBoxeeId];
@@ -400,7 +423,8 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
     if (item == nil)
     {
         item = [[BBMediaItem alloc] initWithBoxeeId:strBoxeeId andSeriesId:strSeriesId];
-        
+        item.strPath = strPath;
+
         [self.allItemsByKey setValue:item forKey:strBoxeeId];
         
         if ([strSeriesId length])
@@ -425,22 +449,20 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
 - (void)processQueryVideoFilesRow:(sqlite3_stmt *)statement
 {
     int columnIndex = 0;
-    NSString* strBoxeeId = [[NSString alloc]initWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
-    NSString* strSeriesId = [[NSString alloc]initWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
-    int iSeason = sqlite3_column_int(statement, columnIndex++);
-    int iEpisode = sqlite3_column_int(statement, columnIndex++);
-    
-    if ([strBoxeeId length] == 0  && [strSeriesId length] >0)
-    {
-        strBoxeeId = [NSString stringWithFormat:@"%@ S%dE%d",strSeriesId, iSeason, iEpisode];
-    }
-    
+    NSString* strBoxeeId = [[NSString alloc]initWithUTF8String:(const char *)sqlite3_column_text(statement, columnIndex++)];
+    NSString* strPath = [[NSString alloc]initWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
+    NSString* strSeriesId = [[NSString alloc]initWithUTF8String:(const char *)sqlite3_column_text(statement, columnIndex++)];
+    char* readChars = (char*)sqlite3_column_text(statement, columnIndex++);
+    NSString* strSeriesTitle = readChars ? [[NSString alloc]initWithUTF8String:readChars] : nil;
+
     BBMediaItem *item;
-    item = [self newOrExistingItemByBoxeeId:strBoxeeId andSeriesId:strSeriesId];
+    item = [self newOrExistingItemByBoxeeId:strBoxeeId Path:strPath orSeriesId:strSeriesId andSeriesTitle:strSeriesTitle];
     
+    item.strPath = strPath;
+    item.iSeason = sqlite3_column_int(statement, columnIndex++);
+    item.iEpisode = sqlite3_column_int(statement, columnIndex++);
     item.idVideo = sqlite3_column_int(statement, columnIndex++);
     item.idFile = sqlite3_column_int(statement, columnIndex++);
-    item.strPath = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
     item.idfFolder = sqlite3_column_int(statement, columnIndex++);
     item.strFolderPath = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, columnIndex++)];
     item.isSharedFolder = (sqlite3_column_int(statement, columnIndex++) > 1);
@@ -525,7 +547,8 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
             
             sqlite3_stmt *statement;
             
-            if (sqlite3_prepare_v2(database, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+            int res = sqlite3_prepare_v2(database, query_stmt, -1, &statement, NULL);
+            if (res == SQLITE_OK)
             {
                 while (sqlite3_step(statement) == SQLITE_ROW
                        && !abortRunning)
@@ -640,15 +663,9 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
             !item.iRating);
 }
 
--(BOOL)findInfoFromOMDB:(BBMediaItem*)item
+-(BOOL)updateItem:(BBMediaItem*)item withData:(NSData*) data
 {
     BOOL itemUpdated = NO;
-    
-    NSString *url = [NSString stringWithFormat:@"http://www.omdbapi.com/?i=%@&t=%@", item.strIMDBKey, item.strIMDBKey.length ? @"" : [item.strTitle stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-    NSURLRequest * urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-    NSURLResponse * response = nil;
-    NSError * error = nil;
-    NSData * data = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&response error:&error];
     
     if (data)
     {
@@ -699,7 +716,7 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
                 item.iYear = iYear;
             }
         }
-
+        
         if (!item.iRating
             && strImdbRating.length && ![strImdbRating isEqualToString:@"N/A"])
         {
@@ -717,14 +734,14 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
             itemUpdated = YES;
             item.strDirector = strDirector;
         }
-
+        
         if (!item.strCast.length
             && strActors.length && ![strActors isEqualToString:@"N/A"])
         {
             itemUpdated = YES;
             item.strCast = strActors;
         }
-
+        
         if (!item.strGenre.length
             && strGenre.length && ![strGenre isEqualToString:@"N/A"])
         {
@@ -736,6 +753,25 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
     return itemUpdated;
 }
 
+-(void)findInfoFromOMDB:(BBMediaItem*)item completionBlock:(void (^)())completionBlock
+{
+    NSString *url = [NSString stringWithFormat:@"http://www.omdbapi.com/?i=%@&t=%@", item.strIMDBKey, item.strIMDBKey.length ? @"" : [item.strTitle stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+    NSURLRequest * urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest: urlRequest completionHandler:
+                                  ^(NSData *data, NSURLResponse *response, NSError *error) {
+                                      if ([self updateItem: item withData:data])
+                                      {
+                                          dispatch_queue_t mainQueue = dispatch_get_main_queue();
+                                          dispatch_async(mainQueue, ^{
+                                              completionBlock();
+                                          });
+                                      }
+                                  }];
+    
+    [task resume];
+}
+
 - (void)findInfoFromOtherSourcesAsync:(BBMediaItem *)item completionBlock:(void (^)())completionBlock
 {
     if (item.strIMDBKey.length || item.strTitle.length)
@@ -744,8 +780,8 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
         dispatch_queue_t queue = dispatch_queue_create(queueName, NULL);
         dispatch_async(queue, ^{
             NSLog(@"searching information in other source (item: %@ BoxeeId: %@ IMDB Id: %@)", item.strTitle, item.strBoxeeId, item.strIMDBKey);
-            if ([self findInfoFromOMDB:item])
-            {
+            
+            [self findInfoFromOMDB:item completionBlock:^{
                 id updatedItem = [item copy];
                 [self.updatedItemsByKey setObject:updatedItem forKey:item.strBoxeeId];
                 
@@ -753,7 +789,7 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
                 dispatch_async(mainQueue, ^{
                     completionBlock();
                 });
-            }
+            }];
         });
     }
 }
@@ -765,9 +801,26 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
     const char *queueName = [[@"LoadCellImageQueue" stringByAppendingString:item.strBoxeeId] cStringUsingEncoding:[NSString defaultCStringEncoding]];
     dispatch_queue_t queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_SERIAL);
     dispatch_async(queue, ^{
-        NSURL *url = [NSURL URLWithString:[item.strCover stringByReplacingOccurrencesOfString:@".org/" withString:@".org:80/"]];
-        NSError *error = nil;
-        item.imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];
+        NSURL *url = nil;
+        if ([item.strCover hasPrefix:@"/tmp"])
+        {
+            NSString *ipAddress = [self.appDelegate readStringAttribute:settingsIpAddress withDefaultValue:@"10.0.0.1"];
+            NSString *loginName = [self.appDelegate readStringAttribute:settingsLoginName withDefaultValue:@"login"];
+            NSString *urlString = [NSString stringWithFormat:@"ftp://%@@%@%@", loginName, ipAddress,
+                                  [item.strCover stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
+            url = [NSURL URLWithString:urlString];
+        }
+        else
+        {
+            url = [NSURL URLWithString:[item.strCover stringByReplacingOccurrencesOfString:@".org/" withString:@".org:80/"]];
+        }
+        
+        if (url != nil)
+        {
+             NSError *error = nil;
+             item.imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];
+        }
+        
         if (item.imageData != nil)
         {
             dispatch_queue_t mainQueue = dispatch_get_main_queue();
@@ -777,6 +830,7 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
             });
             [item.imageData writeToFile:cachedImagePath atomically:YES];
         }
+
     });
 }
 
@@ -790,7 +844,8 @@ const NSString *queryWatched =  @"SELECT strBoxeeId FROM watched WHERE strBoxeeI
     {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents directory
-        NSString *cachedImagePath = [documentsDirectory stringByAppendingPathComponent:[item.strCover lastPathComponent]];
+        NSString *cachedImagePath = [documentsDirectory stringByAppendingPathComponent:
+                                     [[NSString stringWithFormat:@"%@_%@", item.strCover, item.strBoxeeId] lastPathComponent]];
         
         imageData = [NSData dataWithContentsOfFile:cachedImagePath];
         if (imageData == nil)

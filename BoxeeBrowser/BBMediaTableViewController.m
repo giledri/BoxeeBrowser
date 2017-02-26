@@ -126,18 +126,8 @@
     
     [self.dataSource updateView];
 }
-/*
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    CGRect frame = self.navigationItem.titleView.frame;
-    frame.size.width -= 60*3;
-    self.navigationItem.titleView.frame = frame;
-    
-    [self.tableView setContentOffset:self.selectedScrollPosition animated:NO];
-}
-*/
+
+
 -(void)textFieldDidChange:(id) sender
 {
     if (sender == self.searchTextField)
@@ -258,12 +248,13 @@
 
 -(void)reloadData
 {
-    [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+    //[self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     [self.tableView reloadData];
-    
-    if (([self.tableView numberOfSections] == 0 || [self.tableView numberOfRowsInSection:0] == 0)
-        && (self.filter == UnwatchedShows || self.filter == UnwatchedMovies)
-        && self.isInitialFilter)
+
+    if (self.isInitialFilter
+        && ([self.tableView numberOfSections] == 0 || [self.tableView numberOfRowsInSection:0] == 0)
+        && ((self.filter == UnwatchedMovies && [self.dataSource.movies count] > 0) ||
+            (self.filter == UnwatchedShows && [self.dataSource.shows count] > 0)))
     {
         [self filterButtonClicked:self.filterButton];
     }

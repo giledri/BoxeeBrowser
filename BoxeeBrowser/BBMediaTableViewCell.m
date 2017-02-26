@@ -51,7 +51,23 @@
     
     _mediaItem = mediaItem;
     
-    self.mediaTitle.text = mediaItem.strTitle;
+    NSString *seriesHeader;
+    if (mediaItem.iSeason > 0)
+    {
+        seriesHeader = [NSString stringWithFormat:@"Season %d" , mediaItem.iSeason];
+    }
+    if (mediaItem.iEpisode > 0)
+    {
+        seriesHeader = [NSString stringWithFormat:@"%@%@Episode %d",
+                        seriesHeader != nil ? seriesHeader : @"",
+                        seriesHeader != nil ? @", " : @"",
+                        mediaItem.iEpisode];
+    }
+    
+    self.mediaTitle.text = [NSString stringWithFormat:@"%@%@%@ ",
+                            seriesHeader != nil ? seriesHeader : @"",
+                            seriesHeader != nil ? @" : " : @"",
+                            mediaItem.strTitle];
     self.mediaDetails.text = mediaItem.movieDetails;
     UIImage *mediaImage = [self loadImageForCell:self forItem:mediaItem];
     self.mediaImage.image = mediaImage != nil ? mediaImage : self.defaultImage;

@@ -19,6 +19,6 @@
 
 @property (strong, nonatomic) NSMutableDictionary *shows;
 
-- (BBSeries*) initWithSeriesId:(NSString*)strSeriesId;
+- (BBSeries*) initWithSeriesId:(NSString*)strSeriesId andSeriesTitle:(NSString *)strSeriesTitle;
 
 @end

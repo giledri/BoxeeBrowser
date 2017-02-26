@@ -172,8 +172,15 @@
                                 }
                                 
                                 self.receivedText = @"";
-                                [self.expectedTexts removeObjectAtIndex:0];
-                                [self.nextCommands removeObjectAtIndex:0];
+                                if ([self.expectedTexts count])
+                                {
+                                    [self.expectedTexts removeObjectAtIndex:0];
+                                }
+                                
+                                if ([self.nextCommands count])
+                                {
+                                    [self.nextCommands removeObjectAtIndex:0];
+                                }
                             }
                         }
                     }

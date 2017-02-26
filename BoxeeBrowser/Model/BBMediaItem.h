@@ -12,6 +12,8 @@
 
 @property (strong, nonatomic) NSString *strBoxeeId;
 @property (strong, nonatomic) NSString *strSeriesId;
+@property (nonatomic) int iSeason;
+@property (nonatomic) int iEpisode;
 @property (nonatomic) int idVideo;
 @property (nonatomic) int idFile;
 @property (strong, nonatomic) NSString *strPath;

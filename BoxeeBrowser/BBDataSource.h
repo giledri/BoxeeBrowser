@@ -30,7 +30,8 @@ typedef enum {
     TitleAtoZ = 1,
     TitleZtoA = 2,
     DateAddedNewestFirst = 3,
-    dateAddedOldestFirst = 4
+    DateAddedOldestFirst = 4,
+    SeriesAndEpisodeOrder = 5
 } BBOrder;
 
 @property (nonatomic)BBFilter filter;

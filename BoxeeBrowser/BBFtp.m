@@ -48,6 +48,13 @@
     [self doDownloadFile:filePath toLocalPath:targetPath];
 }
 
+- (NSString*)getDbLocalPath:(NSString*)fileName
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents directory
+    return [documentsDirectory stringByAppendingPathComponent:fileName];
+}
+
 - (void)doDownloadFile:(NSString *)filePath toLocalPath:(NSString *)targetPath
 {
     self.fileName = [targetPath lastPathComponent];
